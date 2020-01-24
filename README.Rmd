@@ -17,6 +17,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/panelcleaner)](https://cran.r-project.org/package=panelcleaner)
+[![Travis build status](https://travis-ci.org/psanker/panelcleaner.svg?branch=master)](https://travis-ci.org/psanker/panelcleaner)
+[![Codecov test coverage](https://codecov.io/gh/psanker/panelcleaner/branch/master/graph/badge.svg)](https://codecov.io/gh/psanker/panelcleaner?branch=master)
 <!-- badges: end -->
 
 The goal of panelcleaner is to ...
@@ -53,3 +55,7 @@ plot(pressure)
 ```
 
 In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
+
+## Contributing
+
+Please note that the 'panelcleaner' project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
