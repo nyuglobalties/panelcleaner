@@ -2,11 +2,16 @@ Package: panelcleaner
 Title: An interactive interface to homogenize messy panel data into a long format
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Patrick",
-           family = "Anker",
-           role = c("aut", "cre"),
-           email = "psanker@nyu.edu",
-           comment = c(ORCID = "0000-0003-2302-0445"))
+    c(person(
+            given = "Patrick",
+            family = "Anker",
+            role = c("aut", "cre"),
+            email = "psanker@nyu.edu",
+            comment = c(ORCID = "0000-0003-2302-0445")),
+        person(
+            given = "Global TIES for Children", 
+            role = "cph",
+            comment = "https://research.steinhardt.nyu.edu/ihdsc/global-ties"))
 Description: Panel data structure can sometimes change over the course of 
     data collection, which can be a real nuisance when cleaning data.
     This package aims to document the state of all waves of data in a 
