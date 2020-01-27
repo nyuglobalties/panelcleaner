@@ -16,46 +16,21 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![CRAN status](https://www.r-pkg.org/badges/version/panelcleaner)](https://cran.r-project.org/package=panelcleaner)
-[![Travis build status](https://travis-ci.org/psanker/panelcleaner.svg?branch=master)](https://travis-ci.org/psanker/panelcleaner)
-[![Codecov test coverage](https://codecov.io/gh/psanker/panelcleaner/branch/master/graph/badge.svg)](https://codecov.io/gh/psanker/panelcleaner?branch=master)
+[![Travis build status](https://travis-ci.org/Global-TIES-for-Children/panelcleaner.svg?branch=master)](https://travis-ci.org/Global-TIES-for-Children/panelcleaner)
+[![Codecov test coverage](https://codecov.io/gh/Global-TIES-for-Children/panelcleaner/branch/master/graph/badge.svg)](https://codecov.io/gh/Global-TIES-for-Children/panelcleaner?branch=master)
 <!-- badges: end -->
 
-The goal of panelcleaner is to ...
+Sometimes during data collection, survey structures may change over time due to a litany of potential issues. In order to combine these datasets together into a long format, `panelcleaner` attempts to identify as many issues as possible prior to binding datasets together by thoroughly documenting the state of each variable for each wave. Moreover, with the assistance of [`rcoder`](https://github.com/Global-TIES-for-Children/rcoder), categorical data can be easily recoded into a single, homogenized coding while not losing the labels or any associated metadata.
 
 ## Installation
 
-You can install the released version of panelcleaner from [CRAN](https://CRAN.R-project.org) with:
+As `panelcleaner` does not exist on CRAN yet, you can install the latest development version of this package via:
 
 ``` r
-install.packages("panelcleaner")
+# install.packages("remotes")
+remotes::install_github("Global-TIES-for-Children/panelcleaner")
 ```
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
-library(panelcleaner)
-## basic example code
-```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
 
 ## Contributing
 
-Please note that the 'panelcleaner' project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
+Please note that the `panelcleaner` project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
