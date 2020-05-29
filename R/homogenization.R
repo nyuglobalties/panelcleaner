@@ -1,10 +1,20 @@
-homogenize_panel <- function(panel, mapping, allow_issues = FALSE, ...) {
+homogenize_panel <- function(panel, mapping = NULL, allow_issues = FALSE, ...) {
   tk_assert(is_unhomogenized_panel(panel))
-  tk_assert(is.panel_mapping(panel))
+  tk_assert(is.panel_mapping(panel) || is.null(mapping))
 
+  if (is.null(mapping) && is.null(panel$mapping)) {
+    tk_err(c(
+      "No mapping provided for homogenization.\n",
+      "Either use `add_mapping()` to attache a mapping to the panel,\n",
+      "or use the `mapping` parameter."
+    ))
+  }
+
+  mapping <- mapping %||% panel$mapping
   context <- list(...)
 
   panel <- homogenize_names(panel, mapping, ctx = context)
+  panel <- homogenize_codings(panel, mapping, ctx = context)
 
   if (has_issues(panel) && !allow_issues) {
     tk_err(c(
@@ -13,11 +23,11 @@ homogenize_panel <- function(panel, mapping, allow_issues = FALSE, ...) {
       "or set `allow_issues = TRUE` if they cannot be resolved properly."
     ))
   }
+
+  panel
 }
 
-homogenize_names <- function(panel,
-                             mapping, 
-                             ctx = list()) {
+homogenize_names <- function(panel, mapping, ctx = list()) {
   drop_na_homogenized <- ctx$drop_na_homogenized %||% TRUE
 
   pm_names <- panel_mapping_name_columns(mapping)
@@ -54,10 +64,77 @@ homogenize_names <- function(panel,
   panel
 }
 
-homogenize_wave_names <- function(panel, 
-                                  w, 
-                                  long_map, 
-                                  ctx = list()) {
+homogenize_codings <- function(panel, mapping, ctx = list()) {
+  ignore_missing_codings <- ctx$ignore_missing_codings %||% FALSE
+  ignore_missing_homogenized_coding <- ctx$ignore_missing_homogenized_coding %||% FALSE
+
+  pm_codings <- panel_mapping_coding_columns(mapping)
+  pm_codings_vec <- c(
+    pm_codings$homogenized_name,
+    pm_codings$homogenized_coding, 
+    pm_codings$wave_codings
+  )
+
+  map_subset <- long_map_subset(mapping, pm_codings_vec, panel$waves)
+  attr(map_subset, "schema") <- panel_mapping_schema(mapping)
+
+  # Identify variables that have codings defined but no homogenized coding
+  # and vice versa.
+
+  missing_coding <- 
+    !is.na(map_subset[[pm_codings$homogenized_coding]]) &
+    is.na(map_subset[[panel_mapping_schema(mapping)$wave_coding]])
+
+  missing_homogenized_coding <- 
+    is.na(map_subset[[pm_codings$homogenized_coding]]) &
+    !is.na(map_subset[[panel_mapping_schema(mapping)$wave_coding]])
+
+  if (any(missing_coding)) {
+    if (!isTRUE(ignore_missing_codings)) {
+      tk_err(c(
+        "Some variables have missing codings while a homogenized coding is defined.\n",
+        "To ignore this error, set `ignore_missing_codings = TRUE`"
+      ))
+    } else {
+      bad_mappings <- dplyr::filter(map_subset, missing_coding)
+      bad_mappings <- dplyr::select(
+        bad_mappings, 
+        c("wave", panel_mapping_schema(mapping)$wave_coding)
+      )
+      
+      panel <- add_issues(panel, list(ignored_missing_codings = bad_mappings))
+      map_subset <- dplyr::filter(map_subset, !missing_coding)
+    }
+  }
+
+  if (any(missing_homogenized_coding)) {
+    if (!isTRUE(ignore_missing_homogenized_coding)) {
+      tk_err(c(
+        "Some variables have a missing homogenized coding while wave codings are defined.\n",
+        "To ignore this error, set `ignore_missing_homogenized_coding = TRUE`"
+      ))
+    } else {
+      bad_mappings <- dplyr::filter(map_subset, missing_homogenized_coding)
+      bad_mappings <- dplyr::select(
+        bad_mappings, 
+        c("wave", panel_mapping_schema(mapping)$homogenized_coding)
+      )
+      
+      panel <- add_issues(panel, list(ignored_missing_homogenized_codings = bad_mappings))
+      map_subset <- dplyr::filter(map_subset, !missing_homogenized_coding)
+    }
+  }
+
+  for (w in panel$waves) {
+    panel <- homogenize_wave_codings(panel, w, map_subset, ctx = ctx)
+  }
+
+  panel$homogenized_codings <- TRUE
+
+  panel
+}
+
+homogenize_wave_names <- function(panel, w, long_map, ctx = list()) {
   error_missing_raw_variables <- ctx$error_missing_raw_variables %||% FALSE
 
   schema <- panel_mapping_schema(long_map)
@@ -94,7 +171,6 @@ homogenize_wave_names <- function(panel,
   wave_db <- dplyr::select(wave_db, !!!variables)
   amend_wave(panel, w, wave_db)
 }
-
 
 long_map_subset <- function(mapping, columns, wave_tags) {
   map_subset <- dplyr::select(mapping, columns)

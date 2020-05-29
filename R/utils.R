@@ -53,3 +53,18 @@ tk_assert <- function(x, msg = NULL, .envir = parent.frame()) {
 
   invisible()
 }
+
+dots_partition <- function(...) {
+  dots <- dots_list(...)
+
+  if (is.null(names(dots))) {
+    is_named <- rep(FALSE, length(dots))
+  } else {
+    is_named <- names(dots) != ""
+  }
+
+  list(
+    named = dots[is_named],
+    unnamed = dots[!is_named]
+  )
+}

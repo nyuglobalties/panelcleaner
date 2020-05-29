@@ -57,14 +57,14 @@ add_wave <- function(panel, data, wave, ...) {
 }
 
 add_waves <- function(panel, data, ...) {
-  UseMethod("add_wave")
+  UseMethod("add_waves")
 }
 
 add_wave.default <- function(panel, data, wave) {
   tk_err("Only defined for panel data. See `?enpanel` for more information.")
 }
 
-add_wave.default <- function(panel, data) {
+add_waves.default <- function(panel, data, ...) {
   tk_err("Only defined for panel data. See `?enpanel` for more information.")
 }
 
@@ -126,6 +126,21 @@ add_wave.homogenized_panel <- function(panel, data, wave, .force = FALSE) {
       "use `.force = TRUE` to allow adding the wave."
     ))
   }
+}
+
+add_mapping <- function(x, mapping, ...) {
+  UseMethod("add_mapping")
+}
+
+add_mapping.default <- function(x, mapping, ...) {
+  tk_err("Underdefined operation")
+}
+
+add_mapping.unhomogenized_panel <- function(x, mapping) {
+  tk_assert(is.panel_mapping(mapping))
+
+  x$mapping <- mapping
+  x
 }
 
 link_wave_names <- function(data, waves) {
@@ -199,6 +214,13 @@ print.unhomogenized_panel <- function(x) {
     cat_line(glue("Wave column: {ui_value(x$waves_col)}"))
   } else {
     cat_line(glue("Wave column: <NOT SPECIFIED>"))
+  }
+
+  if (!is.null(x$mapping)) {
+    cat_line("Attached mapping content:")
+    print(x$mapping)
+  } else {
+    cat_line("No mapping attached")
   }
 
   for (wave in x$waves) {

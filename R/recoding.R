@@ -17,17 +17,48 @@ coding_mapping <- function(mapping) {
   )
 }
 
-recoding_tree <- function(cm) {
-  tk_assert(inherits(cm, "coding_mapping"))
+homogenize_wave_codings <- function(panel, w, long_map, ctx = list()) {
+  long_map <- dplyr::filter(long_map, .data$wave == w)
+  long_map <- dplyr::filter(long_map, !is.na(.data[[panel_mapping_schema(long_map)$homogenized_coding]]))
 
-  schema <- panel_mapping_schema(cm)
-  code_cols <- c(schema$homogenized_coding, schema$wave_codings)
-
-  cm <- dplyr::mutate_at(cm, dplyr::vars(code_cols), function(x) lapply(x, rcoder::eval_coding))
-
-  for (cc in code_cols) {
-    cm <- dplyr::mutate(!!as.name(paste0(cc, "_empty")) := lapply(!!as.name(cc), rcoder::is_empty_coding))
+  if (nrow(long_map) < 1) {
+    return(panel)
   }
+
+  wave_db <- wave(panel, w)
+
+  for (variable in long_map[[panel_mapping_schema(long_map)$homogenized_name]]) {
+    func <- variable_recoding_func(variable, panel, long_map)
+    wave_db[[variable]] <- func(wave_db[[variable]])
+  }
+
+  amend_wave(panel, w, wave_db)
+}
+
+variable_recoding_func <- function(variable_name, panel, long_map) {
+  homogenized_coding <- long_map[[panel_mapping_schema(long_map)$homogenized_coding]]
+  homogenized_coding <- safe_eval_coding(homogenized_coding)
+
+  wave_coding <- long_map[[panel_mapping_schema(long_map)$wave_coding]]
+  wave_coding <- safe_eval_coding(wave_coding)
+
+  from_list <- list(wave_coding)
+  names(from_list) <- long_map$wave
+
+  linked_codings <- rcoder::link_codings(homogenized_coding, from_list)
+  rcoder::make_recode_query(linked_codings, long_map$wave)
+}
+
+safe_eval_coding <- function(coding_str) {
+  coding_expr <- tryCatch(
+    rlang::parse_expr(coding_str),
+    error = function(e) tk_err(e$message)
+  )
+  
+  tryCatch(
+    rcoder::eval_coding(coding_expr),
+    error = function(e) tk_err(e$message)
+  )
 }
 
 coding_string_to_expr <- function(coding_str) {
@@ -35,7 +66,7 @@ coding_string_to_expr <- function(coding_str) {
 
   lapply(coding_str, function(cs) {
     if (isTRUE(is.na(cs))) {
-      bquote(coding())
+      quote(coding())
     } else {
       rlang::parse_expr(cs)
     }
