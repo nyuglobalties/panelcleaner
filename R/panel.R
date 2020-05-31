@@ -28,7 +28,7 @@ enpanel <- function(data,
         waves_col = waves_col,
         ...
       ),
-      class = c("tk_panel", "unhomogenized_panel")
+      class = c("unhomogenized_panel", "tk_panel")
     )
   } else if (is.list(data)) {
     waves <- waves %||% names(data) %||% 1:length(data)
@@ -45,7 +45,7 @@ enpanel <- function(data,
         waves_col = waves_col,
         ...
       ),
-      class = c("tk_panel", "unhomogenized_panel")
+      class = c("unhomogenized_panel", "tk_panel")
     )
   } else {
     tk_err("enpanel only accepts a dataframe or list of dataframes.") 
@@ -126,6 +126,10 @@ add_wave.homogenized_panel <- function(panel, data, wave, .force = FALSE) {
       "use `.force = TRUE` to allow adding the wave."
     ))
   }
+
+  panel$data <- dplyr::bind_rows(panel$data, data)
+
+  panel
 }
 
 add_mapping <- function(x, mapping, ...) {
@@ -236,4 +240,79 @@ print.unhomogenized_panel <- function(x) {
   }
 
   invisible()
+}
+
+rbind.unhomogenized_panel <- function(x, allow_issues = FALSE, ...) {
+  if (has_issues(x) && !isTRUE(allow_issues)) {
+    tk_err(c(
+      "Panel {x$name} not able to be homogenized due to issues.\n",
+      "If you want to bypass this, use `allow_issues = TRUE`"
+    ))
+  }
+
+  if (!isTRUE(x$homogenized_names)) {
+    tk_err("Names have not been homogenized.")
+  }
+
+  if (!isTRUE(x$homogenized_codings)) {
+    tk_err("Codings have not been homogenized.")
+  }
+
+  for (w in x$waves) {
+    wave_db <- wave(x, w)
+    wave_db[[x$waves_col]] <- w
+    x <- amend_wave(x, w, wave_db)
+  }
+
+  dat <- dplyr::bind_rows(!!!x$data)
+
+  # Copy metadata over from unhomogenized_panel
+  non_data_params <- names(x)[names(x) != "data"]
+
+  homogenized_panel <- list(data = dat)
+  homogenized_panel[non_data_params] <- x[non_data_params]
+
+  structure(
+    homogenized_panel,
+    class = c("homogenized_panel", "tk_panel")
+  )
+}
+
+print.homogenized_panel <- function(x) {
+  cat_line(glue("<Homogenized Panel: {ui_value(x$name)}>"))
+  cat_line(glue("Waves: [{glue_collapse(ui_value(x$waves), ', ')}]"))
+
+  if (!is.null(x$id_col)) {
+    cat_line(glue("ID column: {ui_value(x$id_col)}"))
+  } else {
+    cat_line(glue("ID column: <NOT SPECIFIED>"))
+  }
+
+  if (!is.null(x$waves_col)) {
+    cat_line(glue("Wave column: {ui_value(x$waves_col)}"))
+  } else {
+    cat_line(glue("Wave column: <NOT SPECIFIED>"))
+  }
+
+  if (!is.null(x$mapping)) {
+    cat_line("Attached mapping content:")
+    print(x$mapping)
+  } else {
+    cat_line("No mapping attached")
+  }
+
+  cat_line()
+  cat_line(glue("Content:"))
+
+  print(dplyr::as_tibble(x$data))
+}
+
+as.data.frame.homogenized_panel <- function(x, ...) {
+  structure(
+    x$data,
+    class = c("mapped_df", class(x$data)),
+    mapping = x$mapping,
+    id_col = x$id_col,
+    waves_col = x$waves_col
+  )
 }

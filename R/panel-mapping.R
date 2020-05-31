@@ -54,7 +54,7 @@ panel_mapping <- function(df, waves, .schema = list()) {
 
   structure(
     df,
-    class = c(class(df), "panel_mapping"),
+    class = c("panel_mapping", class(df)),
     schema = schema
   )
 }
