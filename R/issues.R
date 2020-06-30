@@ -1,3 +1,13 @@
+#' View homogenization issues
+#'
+#' Some issues may be uncovered over the course of homogenization. Rather than
+#' halting execution immediately upon encountering these problems, these issues
+#' are stored within the panel object. Use this function to view the issues
+#' with a panel.
+#'
+#' @param x A panel object
+#'
+#' @export
 issues <- function(x) {
   UseMethod("issues")
 }
@@ -13,6 +23,7 @@ has_issues <- function(x) {
   !identical(issues(x), empty_issues())
 }
 
+#' @export
 issues.tk_panel <- function(x) {
   out <- attr(x, "issues")
 
@@ -23,7 +34,8 @@ issues.tk_panel <- function(x) {
   out
 }
 
-print.tk_issues <- function(x) {
+#' @export
+print.tk_issues <- function(x, ...) {
   if (identical(x, empty_issues())) {
     cat_line("<no issues>")
     return(invisible())
@@ -41,7 +53,7 @@ add_issues <- function(x, issues, ...) {
   UseMethod("add_issues")
 }
 
-add_issues.tk_panel <- function(x, issues) {
+add_issues.tk_panel <- function(x, issues, ...) {
   if (!is.list(issues) || is.data.frame(issues)) {
     tk_err(c(
       "Directly assigning an object to a panel's issues is not allowed.\n",

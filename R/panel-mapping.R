@@ -1,3 +1,10 @@
+#' View the default panel mapping schema
+#'
+#' This schema outlines the column names used by default during panel mapping
+#' creation, when not overridden with the `.schema` parameter in
+#' `panel_mapping()`.
+#'
+#' @export
 default_panel_mapping_schema <- function() {
   list(
     wave_name          = "Name",
@@ -19,6 +26,14 @@ make_panel_mapping_schema <- function(schema) {
   out
 }
 
+#' Create a panel mapping
+#'
+#' @param df A `data.frame` that has variable mapping information
+#' @param waves A vector of all known waves recorded in the mapping file
+#' @param .schema A list of column names that outline the structure of the
+#'   mapping file. `default_panel_mapping_schema()` has the default settings.
+#'
+#' @export
 panel_mapping <- function(df, waves, .schema = list()) {
   tk_assert(is.data.frame(df))
   tk_assert(is.numeric(waves) || is.character(waves))
@@ -78,7 +93,7 @@ panel_mapping_name_columns <- function(panel_mapping) {
   list(
     homogenized_name = schema$homogenized_name,
     wave_names = grep(
-      paste0("^", schema$wave_name, "_"), 
+      paste0("^", schema$wave_name, "_"),
       names(panel_mapping),
       value = TRUE
     )
@@ -94,7 +109,7 @@ panel_mapping_coding_columns <- function(panel_mapping) {
     homogenized_name = schema$homogenized_name,
     homogenized_coding = schema$homogenized_coding,
     wave_codings = grep(
-      paste0("^", schema$wave_coding, "_"), 
+      paste0("^", schema$wave_coding, "_"),
       names(panel_mapping),
       value = TRUE
     )

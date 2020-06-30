@@ -54,7 +54,7 @@ safe_eval_coding <- function(coding_str) {
     rlang::parse_expr(coding_str),
     error = function(e) tk_err(e$message)
   )
-  
+
   tryCatch(
     rcoder::eval_coding(coding_expr),
     error = function(e) tk_err(e$message)

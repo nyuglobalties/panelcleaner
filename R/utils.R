@@ -55,7 +55,7 @@ tk_assert <- function(x, msg = NULL, .envir = parent.frame()) {
 }
 
 dots_partition <- function(...) {
-  dots <- dots_list(...)
+  dots <- rlang::dots_list(...)
 
   if (is.null(names(dots))) {
     is_named <- rep(FALSE, length(dots))
