@@ -19,19 +19,20 @@ test_that("Basic panel structure holds", {
     "q3", NA_character_, "q3", NA_character_, "test_panel", "question_3", NA_character_
   )
 
-  panel <- enpanel(list(t1 = wave_1), "test_panel")
-  expect_identical(enpanel(wave_1, "test_panel", waves = "t1"), panel)
+  panel <- enpanel("test_panel", t1 = wave_1)
 
   expect_true(is_unhomogenized_panel(panel))
   expect_identical(wave(panel, "t1"), wave_1)
+  expect_identical(panel$id_col, "id")
+  expect_identical(panel$waves_col, "wave")
 
   panel <- add_wave(panel, wave_2, "t2")
   expect_identical(wave(panel, "t2"), wave_2)
 
   expect_error(panel_mapping(mapping, c("t1", "t2")))
   panel_map <- panel_mapping(
-    mapping, 
-    c("t1", "t2"), 
+    mapping,
+    c("t1", "t2"),
     .schema = list(
       wave_name = "name",
       wave_coding = "coding",

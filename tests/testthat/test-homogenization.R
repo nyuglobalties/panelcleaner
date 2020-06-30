@@ -16,7 +16,7 @@ test_that("Variable name homogenization works", {
     "q2", NA_character_, "Q2", NA_character_, "test_panel", "question_2", NA_character_,
     "q3", NA_character_, "q3", NA_character_, "test_panel", "question_3", NA_character_
   )
-  
+
   panel_map <- panel_mapping(
     mapping,
     c("t1", "t2"),
@@ -29,8 +29,8 @@ test_that("Variable name homogenization works", {
     )
   )
 
-  panel <- 
-    enpanel(list(t1 = wave_1, t2 = wave_2), "test_panel") %>% 
+  panel <-
+    enpanel("test_panel", t1 = wave_1, t2 = wave_2) %>%
     add_mapping(panel_map)
 
   homogenized_panel <- homogenize_panel(panel)
@@ -55,9 +55,9 @@ test_that("Coding homogenization works", {
 
   coding_1 <- bquote(
     coding(
-      code("Never", 1), 
-      code("Rarely", 2), 
-      code("Sometimes", 3), 
+      code("Never", 1),
+      code("Rarely", 2),
+      code("Sometimes", 3),
       code("Frequently", 4),
       code("Always", 5)
     )
@@ -65,9 +65,9 @@ test_that("Coding homogenization works", {
 
   coding_2 <- bquote(
     coding(
-      code("Never", 5), 
-      code("Rarely", 4), 
-      code("Sometimes", 3), 
+      code("Never", 5),
+      code("Rarely", 4),
+      code("Sometimes", 3),
       code("Frequently", 2),
       code("Always", 1)
     )
@@ -75,9 +75,9 @@ test_that("Coding homogenization works", {
 
   coding_h <- bquote(
     coding(
-      code("Never", 1), 
-      code("Rarely", 2), 
-      code("Sometimes", 3), 
+      code("Never", 1),
+      code("Rarely", 2),
+      code("Sometimes", 3),
       code("Frequently", 4),
       code("Always", 5)
     )
@@ -94,8 +94,8 @@ test_that("Coding homogenization works", {
   )
 
   panel_map <- panel_mapping(
-    mapping, 
-    c("t1", "t2"), 
+    mapping,
+    c("t1", "t2"),
     .schema = list(
       wave_name = "name",
       wave_coding = "coding",
@@ -106,7 +106,16 @@ test_that("Coding homogenization works", {
   )
 
   panel <-
-    enpanel(list(t1 = wave_1, t2 = wave_2), "test_panel") %>% 
-    add_mapping(panel_map) %>% 
+    enpanel("test_panel", t1 = wave_1, t2 = wave_2) %>%
+    add_mapping(panel_map) %>%
     homogenize_panel()
+
+  for (w in panel$waves) {
+    expect_true(
+      rcoder::matches_coding(
+        wave(panel, w)$question_1,
+        rcoder::eval_coding(coding_h)
+      )
+    )
+  }
 })
