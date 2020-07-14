@@ -7,11 +7,11 @@
 #' @export
 default_panel_mapping_schema <- function() {
   list(
-    wave_name          = "Name",
-    wave_coding        = "Code",
-    panel              = "GROUP",
-    homogenized_name   = "HomogenizedName",
-    homogenized_coding = "Coding"
+    wave_name          = "name",
+    wave_coding        = "coding",
+    panel              = "panel",
+    homogenized_name   = "homogenized_name",
+    homogenized_coding = "homogenized_coding"
   )
 }
 
