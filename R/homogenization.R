@@ -31,10 +31,7 @@ homogenize_panel <- function(panel, mapping = NULL, allow_issues = FALSE, ...) {
   context <- list(...)
 
   # Get subset of mapping just for this panel
-  mapping <- dplyr::filter(
-    mapping,
-    .data[[panel_mapping_schema(mapping)$panel]] == panel$name
-  )
+  mapping <- mapping[mapping[[panel_mapping_schema(mapping)$panel]] == panel$name, ]
 
   if (nrow(mapping) < 1) {
     tk_err("Panel {ui_quote(panel$name)} not found in panel mapping.")
