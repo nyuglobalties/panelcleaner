@@ -106,8 +106,6 @@ Participant ID
 
 <td style="text-align:left;">
 
-NA
-
 </td>
 
 <td style="text-align:left;">
@@ -124,8 +122,6 @@ Partcipant ID
 
 <td style="text-align:left;">
 
-NA
-
 </td>
 
 <td style="text-align:left;">
@@ -141,8 +137,6 @@ id
 </td>
 
 <td style="text-align:left;">
-
-NA
 
 </td>
 
@@ -164,8 +158,6 @@ The first question
 
 <td style="text-align:left;">
 
-NA
-
 </td>
 
 <td style="text-align:left;">
@@ -182,8 +174,6 @@ The first question
 
 <td style="text-align:left;">
 
-NA
-
 </td>
 
 <td style="text-align:left;">
@@ -199,8 +189,6 @@ question\_1
 </td>
 
 <td style="text-align:left;">
-
-NA
 
 </td>
 
