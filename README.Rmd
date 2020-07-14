@@ -16,11 +16,84 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Travis build status](https://travis-ci.org/Global-TIES-for-Children/panelcleaner.svg?branch=master)](https://travis-ci.org/Global-TIES-for-Children/panelcleaner)
-[![Codecov test coverage](https://codecov.io/gh/Global-TIES-for-Children/panelcleaner/branch/master/graph/badge.svg)](https://codecov.io/gh/Global-TIES-for-Children/panelcleaner?branch=master)
 <!-- badges: end -->
 
-Sometimes during data collection, survey structures may change over time due to a litany of potential issues. In order to combine these datasets together into a long format, `panelcleaner` attempts to identify as many issues as possible prior to binding datasets together by thoroughly documenting the state of each variable for each wave. Moreover, with the assistance of [`rcoder`](https://github.com/Global-TIES-for-Children/rcoder), categorical data can be easily recoded into a single, homogenized coding while not losing the labels or any associated metadata.
+Sometimes during data collection, survey structures may change over time due to a litany of potential issues. In order to combine these datasets together into a long format, panelcleaner attempts to identify as many issues as possible prior to binding datasets together by thoroughly documenting the state of each variable for each wave. Moreover, with the assistance of [`rcoder`](https://github.com/Global-TIES-for-Children/rcoder), categorical data can be easily recoded into a single, homogenized coding while not losing the labels or any associated metadata.
+
+## Usage
+
+```{r, include=FALSE}
+library(panelcleaner)
+library(magrittr)
+set.seed(9381)
+```
+
+
+panelcleaner is built around a _panel mapping file_, which is a spreadsheet like this:
+
+```{r echo=FALSE, warning=FALSE}
+panel_map_csv <- tibble::tribble(
+  ~ name_1, ~ description_1, ~ coding_1, ~ name_2, ~ description_2, ~ coding_2, ~ panel, ~ homogenized_name, ~ homogenized_coding,
+  "id", "Participant ID", NA, "id", "Partcipant ID", NA, "test_panel", "id", NA,
+  "question1", "The first question", NA, "q1", "The first question", NA, "test_panel", "question_1", NA,
+  "question2", "The second question", "coding(code('Yes', 1), code('No', 0))", "q2", "The second question", "coding(code('Yes', 'YES'), code('No', 'NO'))", "test_panel", "question_2", "coding(code('Yes', 1), code('No', 0))"
+)
+
+kableExtra::kable(panel_map_csv)
+```
+
+The "name", "description", and "coding" columns refer to how the data was structured in waves 1 & 2. The "code" columns are specific to categorical variables, and the `coding()` objects (written out as strings to be interpreted later) represent the categorical level structure. See [rcoder](https://github.com/Global-TIES-for-Children/rcoder) for more information.
+
+Once the mapping is defined, the homogenization process can begin. The first step in the process is to gather waves of data into a _panel_ object:
+
+```{r, warning=FALSE}
+wave1 <- tibble::tibble(
+  id = LETTERS[1:4],
+  question1 = sample(1:100, 4, replace = TRUE),
+  question2 = sample(0:1, 4, replace = TRUE)
+)
+
+wave2 <- tibble::tibble(
+  id = LETTERS[1:4],
+  q1 = sample(1:100, 4, replace = TRUE),
+  q2 = sample(c("NO", "YES"), 4, replace = TRUE)
+)
+
+(test_panel <- enpanel("test_panel", wave1, wave2))
+```
+
+The panel name is "test_panel". Since multiple panels can be defined in the same mapping file, a panel name must be defined to distinguish which mapping belongs to which panel. Moreover, the panel is an _unhomogenized_ panel, which means that waves cannot yet be bound together to form a single, long-format dataset.
+
+The next step is to attach a panel mapping to the created panel:
+
+```{r, warning=FALSE}
+panel_map <-
+  panel_map_csv %>% 
+  panel_mapping(waves = c(1, 2))
+
+test_panel <-
+  test_panel %>% 
+  add_mapping(panel_map)
+
+test_panel
+```
+
+`panel_mapping()` needs information about the specific waves mapped out, so we pass the loaded CSV `data.frame` through `panel_mapping()` to check that the CSV adheres to the panel mapping spec. Then we add the mapping to the panel so that the homogenization process can refer to it. Finally, we homogenize the panel.
+
+```{r, warning=FALSE}
+homogenized_panel <-
+  test_panel %>% 
+  homogenize_panel() %>% 
+  bind_waves()
+
+homogenized_panel
+```
+
+To extract the underlying data, use `as.data.frame()` to convert the homogenized panel to a `mapped_df`, a `data.frame`-like object that carries the panel mapping as an attribute.
+
+```{r}
+str(as.data.frame(homogenized_panel))
+```
 
 ## Installation
 

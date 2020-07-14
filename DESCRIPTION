@@ -1,6 +1,6 @@
 Package: panelcleaner
 Title: An interactive interface to homogenize messy panel data into a long format
-Version: 0.0.1
+Version: 0.0.1.9000
 Authors@R: 
     c(person(
             given = "Patrick",
@@ -21,7 +21,8 @@ License: GPL-3
 Suggests: 
     testthat,
     covr,
-    tibble
+    tibble,
+    kableExtra
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
