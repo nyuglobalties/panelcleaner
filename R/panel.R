@@ -370,6 +370,7 @@ print.homogenized_panel <- function(x, ...) {
   print(dplyr::as_tibble(x$data))
 }
 
+#' @export
 as.data.frame.homogenized_panel <- function(x, ...) {
   structure(
     x$data,
