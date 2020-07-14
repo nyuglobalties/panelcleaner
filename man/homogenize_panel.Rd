@@ -7,7 +7,7 @@
 \usage{
 homogenize_panel(panel, mapping = NULL, allow_issues = FALSE, ...)
 
-bind_waves(panel, allow_issues, ...)
+bind_waves(panel, allow_issues = FALSE, ...)
 }
 \arguments{
 \item{panel}{An unhomogenized panel}

@@ -57,7 +57,7 @@ homogenize_panel <- function(panel, mapping = NULL, allow_issues = FALSE, ...) {
 #' @describeIn homogenize_panel Bind waves into a homogenized panel after
 #'   successful homogenization
 #' @export
-bind_waves <- function(panel, allow_issues, ...) {
+bind_waves <- function(panel, allow_issues = FALSE, ...) {
   tk_assert(
     is_unhomogenized_panel(panel),
     "Only defined for unhomogenized panels"
