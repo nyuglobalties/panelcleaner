@@ -34,6 +34,6 @@ Depends:
 Imports: 
     dplyr,
     rcoder,
-    rlang,
+    rlang (>= 0.4.6),
     glue,
     tidyr
