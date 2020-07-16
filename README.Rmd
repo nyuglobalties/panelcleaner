@@ -59,7 +59,8 @@ wave2 <- tibble::tibble(
   q2 = sample(c("NO", "YES"), 4, replace = TRUE)
 )
 
-(test_panel <- enpanel("test_panel", wave1, wave2))
+test_panel <- enpanel("test_panel", wave1, wave2)
+test_panel
 ```
 
 The panel name is "test_panel". Since multiple panels can be defined in the same mapping file, a panel name must be defined to distinguish which mapping belongs to which panel. Moreover, the panel is an _unhomogenized_ panel, which means that waves cannot yet be bound together to form a single, long-format dataset.
