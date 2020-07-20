@@ -3,3 +3,4 @@
 .RData
 docs/
 .Renviron
+inst/doc
