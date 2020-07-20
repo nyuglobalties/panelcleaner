@@ -28,7 +28,6 @@ library(magrittr)
 set.seed(9381)
 ```
 
-
 panelcleaner is built around a _panel mapping file_, which is a spreadsheet like this:
 
 ```{r echo=FALSE, warning=FALSE}
