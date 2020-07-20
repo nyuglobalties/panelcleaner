@@ -124,6 +124,7 @@ test_that("Coding homogenization works", {
 
   panel_df <- as.data.frame(homogenized_panel)
 
+  expect_true(inherits(panel_df, "mapped_df"))
   expect_true(identical(attr(panel_df, "panel_name"), homogenized_panel$name))
   expect_true(identical(attr(panel_df, "mapping"), panel_map))
 })
