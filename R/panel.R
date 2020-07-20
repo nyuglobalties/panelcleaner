@@ -375,6 +375,7 @@ as.data.frame.homogenized_panel <- function(x, ...) {
   structure(
     x$data,
     class = c("mapped_df", class(x$data)),
+    panel_name = x$name,
     mapping = x$mapping,
     id_col = x$id_col,
     waves_col = x$waves_col
