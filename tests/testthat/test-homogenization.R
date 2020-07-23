@@ -1,4 +1,4 @@
-context("homogenization")
+context("Homogenization")
 
 test_that("Variable name homogenization works", {
   ids_1 <- sample(1:500, 100)
@@ -118,4 +118,13 @@ test_that("Coding homogenization works", {
       )
     )
   }
+
+  homogenized_panel <- bind_waves(panel)
+  expect_true(inherits(homogenized_panel, "homogenized_panel"))
+
+  panel_df <- as.data.frame(homogenized_panel)
+
+  expect_true(inherits(panel_df, "mapped_df"))
+  expect_true(identical(attr(panel_df, "panel_name"), homogenized_panel$name))
+  expect_true(identical(attr(panel_df, "mapping"), panel_map))
 })
