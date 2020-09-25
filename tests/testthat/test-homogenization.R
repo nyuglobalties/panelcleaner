@@ -50,8 +50,19 @@ test_that("Coding homogenization works", {
   ids_2 <- ids_1
   ids_2[sample(1:100, 10)] <- sample(500:1000, 10)
 
-  wave_1 <- data.frame(id = ids_1, time = 1, q1 = sample(1:5, 100, replace = TRUE))
-  wave_2 <- data.frame(id = ids_2, time = 2, question1 = sample(1:5, 100, replace = TRUE))
+  wave_1 <- data.frame(
+    id = ids_1,
+    time = 1,
+    q1 = sample(1:5, 100, replace = TRUE),
+    q2 = sample(1:5, 100, replace = TRUE)
+  )
+
+  wave_2 <- data.frame(
+    id = ids_2,
+    time = 2,
+    question1 = sample(1:5, 100, replace = TRUE),
+    question2 = sample(1:5, 100, replace = TRUE)
+  )
 
   coding_1 <- bquote(
     coding(
@@ -90,7 +101,8 @@ test_that("Coding homogenization works", {
   mapping <- tibble::tribble(
     ~ name_t1, ~ coding_t1, ~ name_t2, ~ coding_t2, ~ panel_name, ~ homogenized_name, ~ homogenized_coding,
     "id", NA_character_, "id", NA_character_, "test_panel", "id", NA_character_,
-    "q1", single_deparse(coding_1), "question1", single_deparse(coding_2), "test_panel", "question_1", single_deparse(coding_h)
+    "q1", single_deparse(coding_1), "question1", single_deparse(coding_2), "test_panel", "question_1", single_deparse(coding_h),
+    "q2", single_deparse(coding_1), "question2", single_deparse(coding_2), "test_panel", "question_2", single_deparse(coding_h)
   )
 
   panel_map <- panel_mapping(

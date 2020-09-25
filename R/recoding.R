@@ -28,14 +28,19 @@ homogenize_wave_codings <- function(panel, w, long_map, ctx = list()) {
   wave_db <- wave(panel, w)
 
   for (variable in long_map[[panel_mapping_schema(long_map)$homogenized_name]]) {
-    func <- variable_recoding_func(variable, panel, long_map)
+    func <- variable_recoding_func(variable, panel, long_map, w)
     wave_db[[variable]] <- func(wave_db[[variable]])
   }
 
   amend_wave(panel, w, wave_db)
 }
 
-variable_recoding_func <- function(variable_name, panel, long_map) {
+variable_recoding_func <- function(variable_name, panel, long_map, wave) {
+  long_map <- long_map[
+    long_map[[panel_mapping_schema(long_map)$homogenized_name]] == variable_name &
+      long_map$wave == wave,
+  ]
+
   homogenized_coding <- long_map[[panel_mapping_schema(long_map)$homogenized_coding]]
   homogenized_coding <- safe_eval_coding(homogenized_coding)
 
@@ -57,7 +62,9 @@ safe_eval_coding <- function(coding_str) {
 
   tryCatch(
     rcoder::eval_coding(coding_expr),
-    error = function(e) tk_err(e$message)
+    error = function(e) {
+      tk_err("Could not evaluate: {coding_str}")
+    }
   )
 }
 

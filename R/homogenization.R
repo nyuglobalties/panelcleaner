@@ -7,15 +7,13 @@
 #' @param panel An unhomogenized panel
 #' @param mapping A panel mapping. If NULL, a panel mapping must be attached
 #'   to the `panel` object using `add_mapping()`
-#' @param allow_issues A logical flag to halt execution if homogenization issues
-#'   are encountered. A good safeguard to ensure that your data is consistent.
 #' @param ... Parameters to be used for context, usually for defining a panel
 #'   schema
 #' @return An `unhomogenized_panel` that is ready to be homogenized using
 #'   `bind_waves()`
 #'
 #' @export
-homogenize_panel <- function(panel, mapping = NULL, allow_issues = FALSE, ...) {
+homogenize_panel <- function(panel, mapping = NULL, ...) {
   tk_assert(is_unhomogenized_panel(panel))
   tk_assert(is.panel_mapping(panel) || is.null(mapping))
 
@@ -40,14 +38,6 @@ homogenize_panel <- function(panel, mapping = NULL, allow_issues = FALSE, ...) {
   panel <- homogenize_names(panel, mapping, ctx = context)
   panel <- homogenize_codings(panel, mapping, ctx = context)
 
-  if (has_issues(panel) && !allow_issues) {
-    tk_err(c(
-      "Panel has issues and cannot be homogenized into one data.frame.\n",
-      "Please address these issues (see `issues(panel)`),\n",
-      "or set `allow_issues = TRUE` if they cannot be resolved properly."
-    ))
-  }
-
   panel
 }
 
@@ -59,6 +49,14 @@ bind_waves <- function(panel, allow_issues = FALSE, ...) {
     is_unhomogenized_panel(panel),
     "Only defined for unhomogenized panels"
   )
+
+  if (has_issues(panel) && !allow_issues) {
+    tk_err(c(
+      "Panel has issues and cannot be homogenized into one data.frame.\n",
+      "Please address these issues (see `issues(panel)`),\n",
+      "or set `allow_issues = TRUE` if they cannot be resolved properly."
+    ))
+  }
 
   rbind(panel, allow_issues = allow_issues, ...)
 }
@@ -80,6 +78,7 @@ homogenize_names <- function(panel, mapping, ctx = list()) {
         "use `drop_na_homogenized = TRUE`."
       ))
     } else {
+      browser()
       bad_mappings <- dplyr::filter(map_subset, is.na(.data[[pm_names$homogenized_name]]))
       bad_mappings <- dplyr::select(
         bad_mappings,
@@ -171,7 +170,7 @@ homogenize_codings <- function(panel, mapping, ctx = list()) {
 }
 
 homogenize_wave_names <- function(panel, w, long_map, ctx = list()) {
-  error_missing_raw_variables <- ctx$error_missing_raw_variables %||% FALSE
+  error_missing_raw_variables <- ctx$error_missing_raw_variables %||% TRUE
 
   schema <- panel_mapping_schema(long_map)
 
@@ -181,20 +180,22 @@ homogenize_wave_names <- function(panel, w, long_map, ctx = list()) {
     tk_err("Wave {ui_value(w)} not found in mapping waves.")
   }
 
-  long_map <- dplyr::filter(long_map, .data$wave == w)
-  long_map <- dplyr::filter(long_map, !is.na(.data[[name_col]]))
+  long_map <- long_map[long_map$wave == w, ]
+  long_map <- long_map[!is.na(long_map[[name_col]]), ]
 
   wave_db <- wave(panel, w)
 
   variables <- long_map[[schema$wave_name]]
 
   if (any(!variables %in% names(wave_db))) {
-    if (isTRUE(error_missing_raw_variables)) {
-      tk_err("Some variables present in mapping for {ui_label(w)} are not in the data.")
-    } else {
-      missing_vars <- dplyr::filter(long_map, .data[[schema$wave_name]] %in% names(wave_db))
-      missing_vars <- dplyr::pull(missing_vars, schema$wave_name)
+    missing_vars <- long_map[!long_map[[schema$wave_name]] %in% names(wave_db), ][[schema$wave_name]]
 
+    if (isTRUE(error_missing_raw_variables)) {
+      tk_err(c(
+        "Some variables present in mapping for {ui_value(w)} are not in the data: [",
+        glue_collapse(ui_value(missing_vars), ", "), "]"
+      ))
+    } else {
       issue <- list(missing_vars)
       names(issue) <- glue("missing_raw_vars_{w}")
 

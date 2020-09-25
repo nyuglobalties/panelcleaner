@@ -52,6 +52,10 @@ panel_mapping <- function(df, waves, .schema = list()) {
     tk_err("Homogenized variable coding column {ui_value(schema$homogenized_coding)} not found.")
   }
 
+  if (any(is.na(df[[schema$panel]]))) {
+    tk_err("{ui_value(schema$panel)} has missing values. Please fix this!")
+  }
+
   for (w in waves) {
     name_col <- paste0(schema$wave_name, "_", w)
     coding_col <- paste0(schema$wave_coding, "_", w)
