@@ -67,7 +67,7 @@ homogenize_names <- function(panel, mapping, ctx = list()) {
   pm_names <- panel_mapping_name_columns(mapping)
   pm_names_vec <- c(pm_names$homogenized_name, pm_names$wave_names)
 
-  map_subset <- long_map_subset(mapping, pm_names_vec, panel$waves)
+  map_subset <- long_map_subset(mapping, pm_names_vec)
   attr(map_subset, "schema") <- panel_mapping_schema(mapping)
 
   if (any(is.na(map_subset[[pm_names$homogenized_name]]))) {
@@ -107,11 +107,18 @@ homogenize_codings <- function(panel, mapping, ctx = list()) {
   pm_codings_vec <- c(
     pm_codings$homogenized_name,
     pm_codings$homogenized_coding,
-    pm_codings$wave_codings
+    pm_codings$wave_codings,
+    pm_codings$wave_names
   )
 
-  map_subset <- long_map_subset(mapping, pm_codings_vec, panel$waves)
+  map_subset <- long_map_subset(mapping, pm_codings_vec)
   attr(map_subset, "schema") <- panel_mapping_schema(mapping)
+
+  # Filter rows with missing wave_name as those are probably
+  # variables that don't exist or aren't mapping
+  map_subset <- map_subset[
+    !is.na(map_subset[[panel_mapping_schema(mapping)$wave_name]]),
+  ]
 
   # Identify variables that have codings defined but no homogenized coding
   # and vice versa.
@@ -209,8 +216,9 @@ homogenize_wave_names <- function(panel, w, long_map, ctx = list()) {
   amend_wave(panel, w, wave_db)
 }
 
-long_map_subset <- function(mapping, columns, wave_tags) {
+long_map_subset <- function(mapping, columns) {
   map_subset <- dplyr::select(mapping, columns)
+  wave_tags <- panel_mapping_waves(mapping)
 
   tidyr::pivot_longer(
     as.data.frame(map_subset),
