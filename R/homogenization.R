@@ -7,6 +7,8 @@
 #' @param panel An unhomogenized panel
 #' @param mapping A panel mapping. If NULL, a panel mapping must be attached
 #'   to the `panel` object using `add_mapping()`
+#' @param allow_issues If `TRUE`, will allow waves to be bound together even if
+#'   there are identified issues. Use caution with this!
 #' @param ... Parameters to be used for context, usually for defining a panel
 #'   schema
 #' @return An `unhomogenized_panel` that is ready to be homogenized using

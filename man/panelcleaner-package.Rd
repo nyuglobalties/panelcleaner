@@ -23,7 +23,7 @@ is consistent across all waves.
 Resources for workflow:
 \itemize{
 \item Defining a panel from waves of data: \code{\link[=enpanel]{enpanel()}}, \code{\link[=add_wave]{add_wave()}}
-\item Accessing waves of data from a panel: \code{\link[=wave]{wave()}}
+\item Accessing waves of data from an unhomogenized panel: \code{\link[=wave]{wave()}}
 \item Defining a panel mapping: \code{\link[=panel_mapping]{panel_mapping()}}
 \item Adding a panel mapping to a panel: \code{\link[=add_mapping]{add_mapping()}}
 \item Homogenize a panel: \code{\link[=homogenize_panel]{homogenize_panel()}}

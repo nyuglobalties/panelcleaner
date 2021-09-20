@@ -5,7 +5,7 @@
 \alias{bind_waves}
 \title{Homogenize all waves to consistent structure}
 \usage{
-homogenize_panel(panel, mapping = NULL, allow_issues = FALSE, ...)
+homogenize_panel(panel, mapping = NULL, ...)
 
 bind_waves(panel, allow_issues = FALSE, ...)
 }
@@ -15,11 +15,11 @@ bind_waves(panel, allow_issues = FALSE, ...)
 \item{mapping}{A panel mapping. If NULL, a panel mapping must be attached
 to the \code{panel} object using \code{add_mapping()}}
 
-\item{allow_issues}{A logical flag to halt execution if homogenization issues
-are encountered. A good safeguard to ensure that your data is consistent.}
-
 \item{...}{Parameters to be used for context, usually for defining a panel
 schema}
+
+\item{allow_issues}{If \code{TRUE}, will allow waves to be bound together even if
+there are identified issues. Use caution with this!}
 }
 \value{
 An \code{unhomogenized_panel} that is ready to be homogenized using
