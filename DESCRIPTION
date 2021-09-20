@@ -1,6 +1,6 @@
 Package: panelcleaner
 Title: An interactive interface to homogenize messy panel data into a long format
-Version: 0.0.1.9000
+Version: 0.0.2
 Authors@R: 
     c(person(
             given = "Patrick",
