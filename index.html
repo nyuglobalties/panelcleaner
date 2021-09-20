@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">panelcleaner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -43,7 +43,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -54,7 +54,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/Global-TIES-for-Children/panelcleaner/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -196,8 +196,8 @@
 </table>
 <p>The “name”, “description”, and “coding” columns refer to how the data was structured in waves 1 &amp; 2. The “code” columns are specific to categorical variables, and the <code>coding()</code> objects (written out as strings to be interpreted later) represent the categorical level structure. See <a href="https://github.com/Global-TIES-for-Children/rcoder">rcoder</a> for more information.</p>
 <p>Once the mapping is defined, the homogenization process can begin. The first step in the process is to gather waves of data into a <em>panel</em> object:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="va">wave1</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">wave1</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
   id <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,
   question1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">4</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
   question2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span>, <span class="fl">4</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -232,11 +232,11 @@
 <span class="co">#&gt; 1 A        22 YES  </span>
 <span class="co">#&gt; 2 B        32 NO   </span>
 <span class="co">#&gt; 3 C        12 NO   </span>
-<span class="co">#&gt; 4 D        59 NO</span></pre></div>
+<span class="co">#&gt; 4 D        59 NO</span></code></pre></div>
 <p>The panel name is “test_panel”. Since multiple panels can be defined in the same mapping file, a panel name must be defined to distinguish which mapping belongs to which panel. Moreover, the panel is an <em>unhomogenized</em> panel, which means that waves cannot yet be bound together to form a single, long-format dataset.</p>
 <p>The next step is to attach a panel mapping to the created panel:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">panel_map</span> <span class="op">&lt;-</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">panel_map</span> <span class="op">&lt;-</span>
   <span class="va">panel_map_csv</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="reference/panel_mapping.html">panel_mapping</a></span><span class="op">(</span>waves <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 
@@ -274,10 +274,10 @@
 <span class="co">#&gt; 1 A        22 YES  </span>
 <span class="co">#&gt; 2 B        32 NO   </span>
 <span class="co">#&gt; 3 C        12 NO   </span>
-<span class="co">#&gt; 4 D        59 NO</span></pre></div>
+<span class="co">#&gt; 4 D        59 NO</span></code></pre></div>
 <p><code><a href="reference/panel_mapping.html">panel_mapping()</a></code> needs information about the specific waves mapped out, so we pass the loaded CSV <code>data.frame</code> through <code><a href="reference/panel_mapping.html">panel_mapping()</a></code> to check that the CSV adheres to the panel mapping spec. Then we add the mapping to the panel so that the homogenization process can refer to it. Finally, we homogenize the panel.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">homogenized_panel</span> <span class="op">&lt;-</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">homogenized_panel</span> <span class="op">&lt;-</span>
   <span class="va">test_panel</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="reference/homogenize_panel.html">homogenize_panel</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="reference/homogenize_panel.html">bind_waves</a></span><span class="op">(</span><span class="op">)</span>
@@ -307,10 +307,10 @@
 <span class="co">#&gt; 5 A             22          1 2    </span>
 <span class="co">#&gt; 6 B             32          0 2    </span>
 <span class="co">#&gt; 7 C             12          0 2    </span>
-<span class="co">#&gt; 8 D             59          0 2</span></pre></div>
+<span class="co">#&gt; 8 D             59          0 2</span></code></pre></div>
 <p>To extract the underlying data, use <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</a></code> to convert the homogenized panel to a <code>mapped_df</code>, a <code>data.frame</code>-like object that carries the panel mapping as an attribute.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">homogenized_panel</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">homogenized_panel</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; tibble [8 × 4] (S3: mapped_df/tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;  $ id        : chr [1:8] "A" "B" "C" "D" ...</span>
 <span class="co">#&gt;  $ question_1: int [1:8] 47 14 85 84 22 32 12 59</span>
@@ -333,15 +333,15 @@
 <span class="co">#&gt;   .. ..$ homogenized_name  : chr "homogenized_name"</span>
 <span class="co">#&gt;   .. ..$ homogenized_coding: chr "homogenized_coding"</span>
 <span class="co">#&gt;  - attr(*, "id_col")= chr "id"</span>
-<span class="co">#&gt;  - attr(*, "waves_col")= chr "wave"</span></pre></div>
+<span class="co">#&gt;  - attr(*, "waves_col")= chr "wave"</span></code></pre></div>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>As <code>panelcleaner</code> does not exist on CRAN yet, you can install the latest development version of this package via:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="co"># install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"Global-TIES-for-Children/panelcleaner"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"Global-TIES-for-Children/panelcleaner"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="contributing" class="section level2">
 <h2 class="hasAnchor">

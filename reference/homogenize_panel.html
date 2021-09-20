@@ -74,7 +74,7 @@ according to a panel mapping." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">panelcleaner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ according to a panel mapping." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +93,7 @@ according to a panel mapping." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/Global-TIES-for-Children/panelcleaner/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,7 +121,7 @@ will homogenize variable names and, where applicable, categorical codings
 according to a panel mapping.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>homogenize_panel</span><span class='op'>(</span><span class='va'>panel</span>, mapping <span class='op'>=</span> <span class='cn'>NULL</span>, allow_issues <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>homogenize_panel</span><span class='op'>(</span><span class='va'>panel</span>, mapping <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>bind_waves</span><span class='op'>(</span><span class='va'>panel</span>, allow_issues <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
@@ -138,14 +138,14 @@ according to a panel mapping.</p>
 to the <code>panel</code> object using <code><a href='add_mapping.html'>add_mapping()</a></code></p></td>
     </tr>
     <tr>
-      <th>allow_issues</th>
-      <td><p>A logical flag to halt execution if homogenization issues
-are encountered. A good safeguard to ensure that your data is consistent.</p></td>
-    </tr>
-    <tr>
       <th>...</th>
       <td><p>Parameters to be used for context, usually for defining a panel
 schema</p></td>
+    </tr>
+    <tr>
+      <th>allow_issues</th>
+      <td><p>If <code>TRUE</code>, will allow waves to be bound together even if
+there are identified issues. Use caution with this!</p></td>
     </tr>
     </table>
 
