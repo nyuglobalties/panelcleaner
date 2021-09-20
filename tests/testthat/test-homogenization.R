@@ -218,5 +218,10 @@ test_that("Partial homogenization works", {
   panel <-
     enpanel("test_panel", `2` = wave_2) %>%
     add_mapping(panel_map) %>%
-    homogenize_panel()
+    homogenize_panel() %>%
+    bind_waves()
+
+  panel_dat <- as.data.frame(panel)
+  expect_true(setequal(unique(panel_dat$wave), "2"))
+  expect_true(setequal(unique(panel_dat$question_2), 1:5))
 })
