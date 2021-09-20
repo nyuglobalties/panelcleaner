@@ -74,12 +74,17 @@ panel_mapping <- function(df, waves, .schema = list()) {
   structure(
     df,
     class = c("panel_mapping", class(df)),
-    schema = schema
+    schema = schema,
+    waves = waves
   )
 }
 
 panel_mapping_schema <- function(x) {
-  attr(x, "schema")
+  attr(x, "schema",  exact = TRUE)
+}
+
+panel_mapping_waves <- function(x) {
+  attr(x, "waves",  exact = TRUE)
 }
 
 prep_mapping <- function(df) {
@@ -114,6 +119,11 @@ panel_mapping_coding_columns <- function(panel_mapping) {
     homogenized_coding = schema$homogenized_coding,
     wave_codings = grep(
       paste0("^", schema$wave_coding, "_"),
+      names(panel_mapping),
+      value = TRUE
+    ),
+    wave_names = grep(
+      paste0("^", schema$wave_name, "_"),
       names(panel_mapping),
       value = TRUE
     )
