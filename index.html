@@ -23,6 +23,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -35,25 +37,19 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">panelcleaner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/Global-TIES-for-Children/panelcleaner/">
+  <a href="https://github.com/Global-TIES-for-Children/panelcleaner/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -70,282 +66,215 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="panelcleaner" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#panelcleaner" class="anchor"></a>panelcleaner</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="panelcleaner">panelcleaner<a class="anchor" aria-label="anchor" href="#panelcleaner"></a>
+</h1></div>
 <!-- badges: start -->
-
-<p>Sometimes during data collection, survey structures may change over time due to a litany of potential issues. In order to combine these datasets together into a long format, panelcleaner attempts to identify as many issues as possible prior to binding datasets together by thoroughly documenting the state of each variable for each wave. Moreover, with the assistance of <a href="https://github.com/Global-TIES-for-Children/rcoder"><code>rcoder</code></a>, categorical data can be easily recoded into a single, homogenized coding while not losing the labels or any associated metadata.</p>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
+<p>Sometimes during data collection, survey structures may change over time due to a litany of potential issues. In order to combine these datasets together into a long format, panelcleaner attempts to identify as many issues as possible prior to binding datasets together by thoroughly documenting the state of each variable for each wave. Moreover, with the assistance of <a href="https://github.com/Global-TIES-for-Children/rcoder" class="external-link"><code>rcoder</code></a>, categorical data can be easily recoded into a single, homogenized coding while not losing the labels or any associated metadata.</p>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
 <p>panelcleaner is built around a <em>panel mapping file</em>, which is a spreadsheet like this:</p>
 <table class="table">
 <thead><tr>
-<th style="text-align:left;">
-<p>name_1</p>
-</th>
-<th style="text-align:left;">
-<p>description_1</p>
-</th>
-<th style="text-align:left;">
-<p>coding_1</p>
-</th>
-<th style="text-align:left;">
-<p>name_2</p>
-</th>
-<th style="text-align:left;">
-<p>description_2</p>
-</th>
-<th style="text-align:left;">
-<p>coding_2</p>
-</th>
-<th style="text-align:left;">
-<p>panel</p>
-</th>
-<th style="text-align:left;">
-<p>homogenized_name</p>
-</th>
-<th style="text-align:left;">
-<p>homogenized_coding</p>
-</th>
+<th style="text-align:left;"><p>name_1</p></th>
+<th style="text-align:left;"><p>description_1</p></th>
+<th style="text-align:left;"><p>coding_1</p></th>
+<th style="text-align:left;"><p>name_2</p></th>
+<th style="text-align:left;"><p>description_2</p></th>
+<th style="text-align:left;"><p>coding_2</p></th>
+<th style="text-align:left;"><p>panel</p></th>
+<th style="text-align:left;"><p>homogenized_name</p></th>
+<th style="text-align:left;"><p>homogenized_coding</p></th>
 </tr></thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
-<p>id</p>
-</td>
-<td style="text-align:left;">
-<p>Participant ID</p>
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-<p>id</p>
-</td>
-<td style="text-align:left;">
-<p>Partcipant ID</p>
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-<p>test_panel</p>
-</td>
-<td style="text-align:left;">
-<p>id</p>
-</td>
-<td style="text-align:left;">
-</td>
+<td style="text-align:left;"><p>id</p></td>
+<td style="text-align:left;"><p>Participant ID</p></td>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"><p>id</p></td>
+<td style="text-align:left;"><p>Partcipant ID</p></td>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"><p>test_panel</p></td>
+<td style="text-align:left;"><p>id</p></td>
+<td style="text-align:left;"></td>
 </tr>
 <tr>
-<td style="text-align:left;">
-<p>question1</p>
-</td>
-<td style="text-align:left;">
-<p>The first question</p>
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-<p>q1</p>
-</td>
-<td style="text-align:left;">
-<p>The first question</p>
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-<p>test_panel</p>
-</td>
-<td style="text-align:left;">
-<p>question_1</p>
-</td>
-<td style="text-align:left;">
-</td>
+<td style="text-align:left;"><p>question1</p></td>
+<td style="text-align:left;"><p>The first question</p></td>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"><p>q1</p></td>
+<td style="text-align:left;"><p>The first question</p></td>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"><p>test_panel</p></td>
+<td style="text-align:left;"><p>question_1</p></td>
+<td style="text-align:left;"></td>
 </tr>
 <tr>
-<td style="text-align:left;">
-<p>question2</p>
-</td>
-<td style="text-align:left;">
-<p>The second question</p>
-</td>
-<td style="text-align:left;">
-<p>coding(code(‘Yes’, 1), code(‘No’, 0))</p>
-</td>
-<td style="text-align:left;">
-<p>q2</p>
-</td>
-<td style="text-align:left;">
-<p>The second question</p>
-</td>
-<td style="text-align:left;">
-<p>coding(code(‘Yes’, ‘YES’), code(‘No’, ‘NO’))</p>
-</td>
-<td style="text-align:left;">
-<p>test_panel</p>
-</td>
-<td style="text-align:left;">
-<p>question_2</p>
-</td>
-<td style="text-align:left;">
-<p>coding(code(‘Yes’, 1), code(‘No’, 0))</p>
-</td>
+<td style="text-align:left;"><p>question2</p></td>
+<td style="text-align:left;"><p>The second question</p></td>
+<td style="text-align:left;"><p>coding(code(‘Yes’, 1), code(‘No’, 0))</p></td>
+<td style="text-align:left;"><p>q2</p></td>
+<td style="text-align:left;"><p>The second question</p></td>
+<td style="text-align:left;"><p>coding(code(‘Yes’, ‘YES’), code(‘No’, ‘NO’))</p></td>
+<td style="text-align:left;"><p>test_panel</p></td>
+<td style="text-align:left;"><p>question_2</p></td>
+<td style="text-align:left;"><p>coding(code(‘Yes’, 1), code(‘No’, 0))</p></td>
 </tr>
 </tbody>
 </table>
-<p>The “name”, “description”, and “coding” columns refer to how the data was structured in waves 1 &amp; 2. The “code” columns are specific to categorical variables, and the <code>coding()</code> objects (written out as strings to be interpreted later) represent the categorical level structure. See <a href="https://github.com/Global-TIES-for-Children/rcoder">rcoder</a> for more information.</p>
+<p>The “name”, “description”, and “coding” columns refer to how the data was structured in waves 1 &amp; 2. The “code” columns are specific to categorical variables, and the <code>coding()</code> objects (written out as strings to be interpreted later) represent the categorical level structure. See <a href="https://github.com/Global-TIES-for-Children/rcoder" class="external-link">rcoder</a> for more information.</p>
 <p>Once the mapping is defined, the homogenization process can begin. The first step in the process is to gather waves of data into a <em>panel</em> object:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">wave1</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
-  id <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,
-  question1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">4</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-  question2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span>, <span class="fl">4</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="va">wave2</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
-  id <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,
-  q1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">4</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-  q2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"NO"</span>, <span class="st">"YES"</span><span class="op">)</span>, <span class="fl">4</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="op">(</span><span class="va">test_panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/enpanel.html">enpanel</a></span><span class="op">(</span><span class="st">"test_panel"</span>, <span class="va">wave1</span>, <span class="va">wave2</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; &lt;Unhomogenized Panel: 'test_panel'&gt;</span>
-<span class="co">#&gt; Waves: ['1', '2']</span>
-<span class="co">#&gt; ID column: 'id'</span>
-<span class="co">#&gt; Wave column: 'wave'</span>
-<span class="co">#&gt; No mapping attached</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; '1' content:</span>
-<span class="co">#&gt; # A tibble: 4 x 3</span>
-<span class="co">#&gt;   id    question1 question2</span>
-<span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt;     &lt;int&gt;</span>
-<span class="co">#&gt; 1 A            47         1</span>
-<span class="co">#&gt; 2 B            14         0</span>
-<span class="co">#&gt; 3 C            85         0</span>
-<span class="co">#&gt; 4 D            84         1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; '2' content:</span>
-<span class="co">#&gt; # A tibble: 4 x 3</span>
-<span class="co">#&gt;   id       q1 q2   </span>
-<span class="co">#&gt;   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1 A        22 YES  </span>
-<span class="co">#&gt; 2 B        32 NO   </span>
-<span class="co">#&gt; 3 C        12 NO   </span>
-<span class="co">#&gt; 4 D        59 NO</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">wave1</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  id <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,</span>
+<span>  question1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">4</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  question2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span>, <span class="fl">4</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">wave2</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  id <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,</span>
+<span>  q1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">4</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  q2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NO"</span>, <span class="st">"YES"</span><span class="op">)</span>, <span class="fl">4</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">(</span><span class="va">test_panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/enpanel.html">enpanel</a></span><span class="op">(</span><span class="st">"test_panel"</span>, <span class="va">wave1</span>, <span class="va">wave2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;Unhomogenized Panel: 'test_panel'&gt;</span></span>
+<span><span class="co">#&gt; Waves: ['1', '2']</span></span>
+<span><span class="co">#&gt; ID column: 'id'</span></span>
+<span><span class="co">#&gt; Wave column: 'wave'</span></span>
+<span><span class="co">#&gt; No mapping attached</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; '1' content:</span></span>
+<span><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span><span class="co">#&gt;   id    question1 question2</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt;     &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 A            47         1</span></span>
+<span><span class="co">#&gt; 2 B            14         0</span></span>
+<span><span class="co">#&gt; 3 C            85         0</span></span>
+<span><span class="co">#&gt; 4 D            84         1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; '2' content:</span></span>
+<span><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span><span class="co">#&gt;   id       q1 q2   </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1 A        22 YES  </span></span>
+<span><span class="co">#&gt; 2 B        32 NO   </span></span>
+<span><span class="co">#&gt; 3 C        12 NO   </span></span>
+<span><span class="co">#&gt; 4 D        59 NO</span></span></code></pre></div>
 <p>The panel name is “test_panel”. Since multiple panels can be defined in the same mapping file, a panel name must be defined to distinguish which mapping belongs to which panel. Moreover, the panel is an <em>unhomogenized</em> panel, which means that waves cannot yet be bound together to form a single, long-format dataset.</p>
 <p>The next step is to attach a panel mapping to the created panel:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">panel_map</span> <span class="op">&lt;-</span>
-  <span class="va">panel_map_csv</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/panel_mapping.html">panel_mapping</a></span><span class="op">(</span>waves <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">test_panel</span> <span class="op">&lt;-</span>
-  <span class="va">test_panel</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/add_mapping.html">add_mapping</a></span><span class="op">(</span><span class="va">panel_map</span><span class="op">)</span>
-
-<span class="va">test_panel</span>
-<span class="co">#&gt; &lt;Unhomogenized Panel: 'test_panel'&gt;</span>
-<span class="co">#&gt; Waves: ['1', '2']</span>
-<span class="co">#&gt; ID column: 'id'</span>
-<span class="co">#&gt; Wave column: 'wave'</span>
-<span class="co">#&gt; Attached mapping content:</span>
-<span class="co">#&gt; # A tibble: 3 x 9</span>
-<span class="co">#&gt;   name_1 description_1 coding_1 name_2 description_2 coding_2 panel</span>
-<span class="co">#&gt; * &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;</span>
-<span class="co">#&gt; 1 id     Participant … &lt;NA&gt;     id     Partcipant ID &lt;NA&gt;     test…</span>
-<span class="co">#&gt; 2 quest… The first qu… &lt;NA&gt;     q1     The first qu… &lt;NA&gt;     test…</span>
-<span class="co">#&gt; 3 quest… The second q… coding(… q2     The second q… coding(… test…</span>
-<span class="co">#&gt; # … with 2 more variables: homogenized_name &lt;chr&gt;, homogenized_coding &lt;chr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; '1' content:</span>
-<span class="co">#&gt; # A tibble: 4 x 3</span>
-<span class="co">#&gt;   id    question1 question2</span>
-<span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt;     &lt;int&gt;</span>
-<span class="co">#&gt; 1 A            47         1</span>
-<span class="co">#&gt; 2 B            14         0</span>
-<span class="co">#&gt; 3 C            85         0</span>
-<span class="co">#&gt; 4 D            84         1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; '2' content:</span>
-<span class="co">#&gt; # A tibble: 4 x 3</span>
-<span class="co">#&gt;   id       q1 q2   </span>
-<span class="co">#&gt;   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1 A        22 YES  </span>
-<span class="co">#&gt; 2 B        32 NO   </span>
-<span class="co">#&gt; 3 C        12 NO   </span>
-<span class="co">#&gt; 4 D        59 NO</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">panel_map</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">panel_map_csv</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu"><a href="reference/panel_mapping.html">panel_mapping</a></span><span class="op">(</span>waves <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">test_panel</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">test_panel</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu"><a href="reference/add_mapping.html">add_mapping</a></span><span class="op">(</span><span class="va">panel_map</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">test_panel</span></span>
+<span><span class="co">#&gt; &lt;Unhomogenized Panel: 'test_panel'&gt;</span></span>
+<span><span class="co">#&gt; Waves: ['1', '2']</span></span>
+<span><span class="co">#&gt; ID column: 'id'</span></span>
+<span><span class="co">#&gt; Wave column: 'wave'</span></span>
+<span><span class="co">#&gt; Attached mapping content:</span></span>
+<span><span class="co">#&gt; # A tibble: 3 x 9</span></span>
+<span><span class="co">#&gt;   name_1 description_1 coding_1 name_2 description_2 coding_2 panel</span></span>
+<span><span class="co">#&gt; * &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1 id     Participant … &lt;NA&gt;     id     Partcipant ID &lt;NA&gt;     test…</span></span>
+<span><span class="co">#&gt; 2 quest… The first qu… &lt;NA&gt;     q1     The first qu… &lt;NA&gt;     test…</span></span>
+<span><span class="co">#&gt; 3 quest… The second q… coding(… q2     The second q… coding(… test…</span></span>
+<span><span class="co">#&gt; # … with 2 more variables: homogenized_name &lt;chr&gt;, homogenized_coding &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; '1' content:</span></span>
+<span><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span><span class="co">#&gt;   id    question1 question2</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt;     &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 A            47         1</span></span>
+<span><span class="co">#&gt; 2 B            14         0</span></span>
+<span><span class="co">#&gt; 3 C            85         0</span></span>
+<span><span class="co">#&gt; 4 D            84         1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; '2' content:</span></span>
+<span><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span><span class="co">#&gt;   id       q1 q2   </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;int&gt; &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1 A        22 YES  </span></span>
+<span><span class="co">#&gt; 2 B        32 NO   </span></span>
+<span><span class="co">#&gt; 3 C        12 NO   </span></span>
+<span><span class="co">#&gt; 4 D        59 NO</span></span></code></pre></div>
 <p><code><a href="reference/panel_mapping.html">panel_mapping()</a></code> needs information about the specific waves mapped out, so we pass the loaded CSV <code>data.frame</code> through <code><a href="reference/panel_mapping.html">panel_mapping()</a></code> to check that the CSV adheres to the panel mapping spec. Then we add the mapping to the panel so that the homogenization process can refer to it. Finally, we homogenize the panel.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">homogenized_panel</span> <span class="op">&lt;-</span>
-  <span class="va">test_panel</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/homogenize_panel.html">homogenize_panel</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/homogenize_panel.html">bind_waves</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">homogenized_panel</span>
-<span class="co">#&gt; &lt;Homogenized Panel: 'test_panel'&gt;</span>
-<span class="co">#&gt; Waves: ['1', '2']</span>
-<span class="co">#&gt; ID column: 'id'</span>
-<span class="co">#&gt; Wave column: 'wave'</span>
-<span class="co">#&gt; Attached mapping content:</span>
-<span class="co">#&gt; # A tibble: 3 x 9</span>
-<span class="co">#&gt;   name_1 description_1 coding_1 name_2 description_2 coding_2 panel</span>
-<span class="co">#&gt; * &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;</span>
-<span class="co">#&gt; 1 id     Participant … &lt;NA&gt;     id     Partcipant ID &lt;NA&gt;     test…</span>
-<span class="co">#&gt; 2 quest… The first qu… &lt;NA&gt;     q1     The first qu… &lt;NA&gt;     test…</span>
-<span class="co">#&gt; 3 quest… The second q… coding(… q2     The second q… coding(… test…</span>
-<span class="co">#&gt; # … with 2 more variables: homogenized_name &lt;chr&gt;, homogenized_coding &lt;chr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Content:</span>
-<span class="co">#&gt; # A tibble: 8 x 4</span>
-<span class="co">#&gt;   id    question_1 question_2 wave </span>
-<span class="co">#&gt;   &lt;chr&gt;      &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1 A             47          1 1    </span>
-<span class="co">#&gt; 2 B             14          0 1    </span>
-<span class="co">#&gt; 3 C             85          0 1    </span>
-<span class="co">#&gt; 4 D             84          1 1    </span>
-<span class="co">#&gt; 5 A             22          1 2    </span>
-<span class="co">#&gt; 6 B             32          0 2    </span>
-<span class="co">#&gt; 7 C             12          0 2    </span>
-<span class="co">#&gt; 8 D             59          0 2</span></code></pre></div>
-<p>To extract the underlying data, use <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</a></code> to convert the homogenized panel to a <code>mapped_df</code>, a <code>data.frame</code>-like object that carries the panel mapping as an attribute.</p>
+<code class="sourceCode R"><span><span class="va">homogenized_panel</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">test_panel</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu"><a href="reference/homogenize_panel.html">homogenize_panel</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu"><a href="reference/homogenize_panel.html">bind_waves</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">homogenized_panel</span></span>
+<span><span class="co">#&gt; &lt;Homogenized Panel: 'test_panel'&gt;</span></span>
+<span><span class="co">#&gt; Waves: ['1', '2']</span></span>
+<span><span class="co">#&gt; ID column: 'id'</span></span>
+<span><span class="co">#&gt; Wave column: 'wave'</span></span>
+<span><span class="co">#&gt; Attached mapping content:</span></span>
+<span><span class="co">#&gt; # A tibble: 3 x 9</span></span>
+<span><span class="co">#&gt;   name_1 description_1 coding_1 name_2 description_2 coding_2 panel</span></span>
+<span><span class="co">#&gt; * &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1 id     Participant … &lt;NA&gt;     id     Partcipant ID &lt;NA&gt;     test…</span></span>
+<span><span class="co">#&gt; 2 quest… The first qu… &lt;NA&gt;     q1     The first qu… &lt;NA&gt;     test…</span></span>
+<span><span class="co">#&gt; 3 quest… The second q… coding(… q2     The second q… coding(… test…</span></span>
+<span><span class="co">#&gt; # … with 2 more variables: homogenized_name &lt;chr&gt;, homogenized_coding &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Content:</span></span>
+<span><span class="co">#&gt; # A tibble: 8 x 4</span></span>
+<span><span class="co">#&gt;   id    question_1 question_2 wave </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;      &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;</span></span>
+<span><span class="co">#&gt; 1 A             47          1 1    </span></span>
+<span><span class="co">#&gt; 2 B             14          0 1    </span></span>
+<span><span class="co">#&gt; 3 C             85          0 1    </span></span>
+<span><span class="co">#&gt; 4 D             84          1 1    </span></span>
+<span><span class="co">#&gt; 5 A             22          1 2    </span></span>
+<span><span class="co">#&gt; 6 B             32          0 2    </span></span>
+<span><span class="co">#&gt; 7 C             12          0 2    </span></span>
+<span><span class="co">#&gt; 8 D             59          0 2</span></span></code></pre></div>
+<p>To extract the underlying data, use <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame()</a></code> to convert the homogenized panel to a <code>mapped_df</code>, a <code>data.frame</code>-like object that carries the panel mapping as an attribute.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">homogenized_panel</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; tibble [8 × 4] (S3: mapped_df/tbl_df/tbl/data.frame)</span>
-<span class="co">#&gt;  $ id        : chr [1:8] "A" "B" "C" "D" ...</span>
-<span class="co">#&gt;  $ question_1: int [1:8] 47 14 85 84 22 32 12 59</span>
-<span class="co">#&gt;  $ question_2: num [1:8] 1 0 0 1 1 0 0 0</span>
-<span class="co">#&gt;  $ wave      : chr [1:8] "1" "1" "1" "1" ...</span>
-<span class="co">#&gt;  - attr(*, "mapping")= tibble [3 × 9] (S3: panel_mapping/tbl_df/tbl/data.frame)</span>
-<span class="co">#&gt;   ..$ name_1            : chr [1:3] "id" "question1" "question2"</span>
-<span class="co">#&gt;   ..$ description_1     : chr [1:3] "Participant ID" "The first question" "The second question"</span>
-<span class="co">#&gt;   ..$ coding_1          : chr [1:3] NA NA "coding(code('Yes', 1), code('No', 0))"</span>
-<span class="co">#&gt;   ..$ name_2            : chr [1:3] "id" "q1" "q2"</span>
-<span class="co">#&gt;   ..$ description_2     : chr [1:3] "Partcipant ID" "The first question" "The second question"</span>
-<span class="co">#&gt;   ..$ coding_2          : chr [1:3] NA NA "coding(code('Yes', 'YES'), code('No', 'NO'))"</span>
-<span class="co">#&gt;   ..$ panel             : chr [1:3] "test_panel" "test_panel" "test_panel"</span>
-<span class="co">#&gt;   ..$ homogenized_name  : chr [1:3] "id" "question_1" "question_2"</span>
-<span class="co">#&gt;   ..$ homogenized_coding: chr [1:3] NA NA "coding(code('Yes', 1), code('No', 0))"</span>
-<span class="co">#&gt;   ..- attr(*, "schema")=List of 5</span>
-<span class="co">#&gt;   .. ..$ wave_name         : chr "name"</span>
-<span class="co">#&gt;   .. ..$ wave_coding       : chr "coding"</span>
-<span class="co">#&gt;   .. ..$ panel             : chr "panel"</span>
-<span class="co">#&gt;   .. ..$ homogenized_name  : chr "homogenized_name"</span>
-<span class="co">#&gt;   .. ..$ homogenized_coding: chr "homogenized_coding"</span>
-<span class="co">#&gt;  - attr(*, "id_col")= chr "id"</span>
-<span class="co">#&gt;  - attr(*, "waves_col")= chr "wave"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">homogenized_panel</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; tibble [8 × 4] (S3: mapped_df/tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;  $ id        : chr [1:8] "A" "B" "C" "D" ...</span></span>
+<span><span class="co">#&gt;  $ question_1: int [1:8] 47 14 85 84 22 32 12 59</span></span>
+<span><span class="co">#&gt;  $ question_2: num [1:8] 1 0 0 1 1 0 0 0</span></span>
+<span><span class="co">#&gt;  $ wave      : chr [1:8] "1" "1" "1" "1" ...</span></span>
+<span><span class="co">#&gt;  - attr(*, "mapping")= tibble [3 × 9] (S3: panel_mapping/tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;   ..$ name_1            : chr [1:3] "id" "question1" "question2"</span></span>
+<span><span class="co">#&gt;   ..$ description_1     : chr [1:3] "Participant ID" "The first question" "The second question"</span></span>
+<span><span class="co">#&gt;   ..$ coding_1          : chr [1:3] NA NA "coding(code('Yes', 1), code('No', 0))"</span></span>
+<span><span class="co">#&gt;   ..$ name_2            : chr [1:3] "id" "q1" "q2"</span></span>
+<span><span class="co">#&gt;   ..$ description_2     : chr [1:3] "Partcipant ID" "The first question" "The second question"</span></span>
+<span><span class="co">#&gt;   ..$ coding_2          : chr [1:3] NA NA "coding(code('Yes', 'YES'), code('No', 'NO'))"</span></span>
+<span><span class="co">#&gt;   ..$ panel             : chr [1:3] "test_panel" "test_panel" "test_panel"</span></span>
+<span><span class="co">#&gt;   ..$ homogenized_name  : chr [1:3] "id" "question_1" "question_2"</span></span>
+<span><span class="co">#&gt;   ..$ homogenized_coding: chr [1:3] NA NA "coding(code('Yes', 1), code('No', 0))"</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "schema")=List of 5</span></span>
+<span><span class="co">#&gt;   .. ..$ wave_name         : chr "name"</span></span>
+<span><span class="co">#&gt;   .. ..$ wave_coding       : chr "coding"</span></span>
+<span><span class="co">#&gt;   .. ..$ panel             : chr "panel"</span></span>
+<span><span class="co">#&gt;   .. ..$ homogenized_name  : chr "homogenized_name"</span></span>
+<span><span class="co">#&gt;   .. ..$ homogenized_coding: chr "homogenized_coding"</span></span>
+<span><span class="co">#&gt;  - attr(*, "id_col")= chr "id"</span></span>
+<span><span class="co">#&gt;  - attr(*, "waves_col")= chr "wave"</span></span></code></pre></div>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>As <code>panelcleaner</code> does not exist on CRAN yet, you can install the latest development version of this package via:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"Global-TIES-for-Children/panelcleaner"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Global-TIES-for-Children/panelcleaner"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="contributing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h2>
+<div class="section level2">
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
 <p>Please note that the <code>panelcleaner</code> project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>
@@ -353,52 +282,64 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/Global-TIES-for-Children/panelcleaner/">https://​github.com/​Global-TIES-for-Children/​panelcleaner/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/Global-TIES-for-Children/panelcleaner/issues">https://​github.com/​Global-TIES-for-Children/​panelcleaner/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
-</ul>
-</div>
-<div class="community">
-<h2>Community</h2>
-<ul class="list-unstyled">
-<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
-<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Patrick Anker <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-2302-0445" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://github.com/Global-TIES-for-Children/panelcleaner/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/Global-TIES-for-Children/panelcleaner/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+<div class="community">
+<h2 data-toc-skip>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+<li><a href="SUPPORT.html">Getting help</a></li>
+</ul>
 </div>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing panelcleaner</a></li>
+</ul>
+</div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Patrick Anker <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-2302-0445" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://www.tidyverse.org/lifecycle/#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Patrick Anker.</p>
+  <p></p>
+<p>Developed by Patrick Anker.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -406,6 +347,8 @@
 
   
 
+
+  
 
   </body>
 </html>
