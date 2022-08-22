@@ -251,7 +251,7 @@ test_that("description mapping works", {
 
   mapping <- tibble::tribble(
     ~name_1, ~coding_1, ~description_1, ~name_2, ~coding_2, ~description_2, ~panel, ~homogenized_name, ~homogenized_coding, ~homogenized_description, # nolint: line_length_linter
-    "id", NA_character_, "Test description", "id", NA_character_, "Test description", "test_panel", "id", NA_character_, "An example description" # nolint: line_length_linter
+    "id", NA_character_, "Test description", "id", NA_character_, "Test description", "test_panel", "ID", NA_character_, "An example description" # nolint: line_length_linter
   )
   panel_map <- panel_mapping(mapping, 1:2)
 
@@ -261,12 +261,12 @@ test_that("description mapping works", {
     homogenize_panel()
 
   expect_identical(
-    get_attr(wave(panel, 1)$id, "bpr.description"),
+    get_attr(wave(panel, 1)$ID, "bpr.description"),
     "An example description"
   )
 
   expect_identical(
-    get_attr(wave(panel, 2)$id, "bpr.description"),
+    get_attr(wave(panel, 2)$ID, "bpr.description"),
     "An example description"
   )
 
