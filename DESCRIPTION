@@ -40,3 +40,5 @@ Imports:
     glue,
     tidyr
 VignetteBuilder: knitr
+Remotes:
+    nyuglobalties/rcoder
