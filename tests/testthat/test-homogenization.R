@@ -9,7 +9,7 @@ test_that("Variable name homogenization works", {
   wave_2 <- data.frame(id = ids_2, time = 2, question1 = sample(1:5, 100, replace = TRUE), Q2 = sample(0:1, 100, replace = TRUE), q3 = sample(letters[1:10], 100, replace = TRUE), stringsAsFactors = FALSE)
 
   mapping <- tibble::tribble(
-    ~ name_t1, ~ coding_t1, ~ name_t2, ~ coding_t2, ~ panel_name, ~ homogenized_name, ~ homogenized_coding,
+    ~name_t1, ~coding_t1, ~name_t2, ~coding_t2, ~panel_name, ~homogenized_name, ~homogenized_coding,
     "id", NA_character_, "id", NA_character_, "test_panel", "id", NA_character_,
     "time", NA_character_, "time", NA_character_, "test_panel", "time", NA_character_,
     "q1", NA_character_, "question1", NA_character_, "test_panel", "question_1", NA_character_,
@@ -99,7 +99,7 @@ test_that("Coding homogenization works", {
   }
 
   mapping <- tibble::tribble(
-    ~ name_t1, ~ coding_t1, ~ name_t2, ~ coding_t2, ~ panel_name, ~ homogenized_name, ~ homogenized_coding,
+    ~name_t1, ~coding_t1, ~name_t2, ~coding_t2, ~panel_name, ~homogenized_name, ~homogenized_coding,
     "id", NA_character_, "id", NA_character_, "test_panel", "id", NA_character_,
     "q1", single_deparse(coding_1), "question1", single_deparse(coding_2), "test_panel", "question_1", single_deparse(coding_h),
     "q2", single_deparse(coding_1), "question2", single_deparse(coding_2), "test_panel", "question_2", single_deparse(coding_h)
@@ -197,7 +197,7 @@ test_that("Partial homogenization works", {
   }
 
   mapping <- tibble::tribble(
-    ~ name_1, ~ coding_1, ~ name_2, ~ coding_2, ~ panel_name, ~ homogenized_name, ~ homogenized_coding,
+    ~name_1, ~coding_1, ~name_2, ~coding_2, ~panel_name, ~homogenized_name, ~homogenized_coding,
     NA_character_, NA_character_, "id", NA_character_, "test_panel", "id", NA_character_,
     NA_character_, NA_character_, "question1", single_deparse(coding_2), "test_panel", "question_1", single_deparse(coding_h),
     NA_character_, NA_character_, "question2", single_deparse(coding_2), "test_panel", "question_2", single_deparse(coding_h)
@@ -224,4 +224,77 @@ test_that("Partial homogenization works", {
   panel_dat <- as.data.frame(panel)
   expect_true(setequal(unique(panel_dat$wave), "2"))
   expect_true(setequal(unique(panel_dat$question_2), 1:5))
+})
+
+test_that("description mapping works", {
+  set.seed(1182)
+
+  ids_1 <- sample(1:500, 100)
+  ids_2 <- ids_1
+  ids_2[sample(1:100, 10)] <- sample(500:1000, 10)
+
+  wave_1 <- data.frame(
+    id = ids_1
+  )
+
+  wave_2 <- data.frame(
+    id = ids_2
+  )
+
+  # Fails because wave descriptions are needed
+  mapping_bad <- tibble::tribble(
+    ~name_1, ~coding_1, ~name_2, ~coding_2, ~panel, ~homogenized_name, ~homogenized_coding, ~homogenized_description, # nolint: line_length_linter
+    "id", NA_character_, "id", NA_character_, "test_panel", "id", NA_character_, "Test description"
+  )
+  err <- expect_error(panel_mapping(mapping_bad, 1:2), class = "tk_error")
+  expect_true(grepl("description", err$message))
+
+  mapping <- tibble::tribble(
+    ~name_1, ~coding_1, ~description_1, ~name_2, ~coding_2, ~description_2, ~panel, ~homogenized_name, ~homogenized_coding, ~homogenized_description, # nolint: line_length_linter
+    "id", NA_character_, "Test description", "id", NA_character_, "Test description", "test_panel", "id", NA_character_, "An example description" # nolint: line_length_linter
+  )
+  panel_map <- panel_mapping(mapping, 1:2)
+
+  panel <-
+    enpanel("test_panel", wave_1, wave_2) %>%
+    add_mapping(panel_map) %>%
+    homogenize_panel()
+
+  expect_identical(
+    get_attr(wave(panel, 1)$id, "bpr.description"),
+    "An example description"
+  )
+
+  expect_identical(
+    get_attr(wave(panel, 2)$id, "bpr.description"),
+    "An example description"
+  )
+
+  # If homogenizing description, homogenized description must be filled in if wave descs exist
+  bad_mapping_no_hom_desc <- tibble::tribble(
+    ~name_1, ~coding_1, ~description_1, ~name_2, ~coding_2, ~description_2, ~panel, ~homogenized_name, ~homogenized_coding, ~homogenized_description, # nolint: line_length_linter
+    "id", NA_character_, "Test description", "id", NA_character_, "Test description", "test_panel", "id", NA_character_, NA_character_ # nolint: line_length_linter
+  )
+
+  err <- expect_error(
+    enpanel("test_panel", wave_1, wave_2) %>%
+      add_mapping(panel_mapping(bad_mapping_no_hom_desc, 1:2)) %>%
+      homogenize_panel(),
+    class = "tk_error"
+  )
+  expect_true(grepl("missing homogenized", err$message))
+
+  # Conversely, wave descs must be filled in if homogenized description exists
+  bad_mapping_no_wave_desc <- tibble::tribble(
+    ~name_1, ~coding_1, ~description_1, ~name_2, ~coding_2, ~description_2, ~panel, ~homogenized_name, ~homogenized_coding, ~homogenized_description, # nolint: line_length_linter
+    "id", NA_character_, "Test description", "id", NA_character_, NA_character_, "test_panel", "id", NA_character_, "An example description" # nolint: line_length_linter
+  )
+
+  err <- expect_error(
+    enpanel("test_panel", wave_1, wave_2) %>%
+      add_mapping(panel_mapping(bad_mapping_no_wave_desc, 1:2)) %>%
+      homogenize_panel(),
+    class = "tk_error"
+  )
+  expect_true(grepl("missing descriptions", err$message))
 })

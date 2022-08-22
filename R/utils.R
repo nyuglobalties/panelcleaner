@@ -30,13 +30,13 @@ ui_quote <- function(x) {
 tk_err <- function(x, .envir = parent.frame()) {
   msg <- glue(glue_collapse(x), .envir = .envir)
 
-  abort(.subclass = "tk_error", message = msg)
+  abort(class = "tk_error", message = msg)
 }
 
 tk_warn <- function(x, .envir = parent.frame()) {
   msg <- glue(glue_collapse(x), .envir = .envir)
 
-  warn(.subclass = "tk_warning", message = msg)
+  warn(class = "tk_warning", message = msg)
 }
 
 tk_assert <- function(x, msg = NULL, .envir = parent.frame()) {
@@ -67,4 +67,13 @@ dots_partition <- function(...) {
     named = dots[is_named],
     unnamed = dots[!is_named]
   )
+}
+
+set_attr <- function(x, key, value) {
+  attr(x, key) <- value
+  x
+}
+
+get_attr <- function(x, key) {
+  attr(x, key, exact = TRUE)
 }
