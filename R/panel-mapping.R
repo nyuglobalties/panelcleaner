@@ -7,11 +7,13 @@
 #' @export
 default_panel_mapping_schema <- function() {
   list(
-    wave_name          = "name",
-    wave_coding        = "coding",
-    panel              = "panel",
-    homogenized_name   = "homogenized_name",
-    homogenized_coding = "homogenized_coding"
+    wave_name = "name",
+    wave_coding = "coding",
+    wave_description = "description",
+    panel = "panel",
+    homogenized_name = "homogenized_name",
+    homogenized_coding = "homogenized_coding",
+    homogenized_description = "homogenized_description"
   )
 }
 
@@ -59,6 +61,7 @@ panel_mapping <- function(df, waves, .schema = list()) {
   for (w in waves) {
     name_col <- paste0(schema$wave_name, "_", w)
     coding_col <- paste0(schema$wave_coding, "_", w)
+    description_col <- paste0(schema$wave_description, "_", w)
 
     if (!name_col %in% names(df)) {
       tk_err("Wave {ui_value(w)} variable name column {ui_value(name_col)} not found.")
@@ -66,6 +69,15 @@ panel_mapping <- function(df, waves, .schema = list()) {
 
     if (!coding_col %in% names(df)) {
       tk_err("Homogenized {ui_value(w)} variable coding column {ui_value(coding_col)} not found.")
+    }
+  }
+
+  # Map descriptions if homogenized description exists
+  if (schema$homogenized_description %in% names(df)) {
+    for (w in waves) {
+      if (!description_col %in% names(df)) {
+        tk_err("Homogenized {ui_value(w)} variable description column {ui_value(description_col)} not found.")
+      }
     }
   }
 
@@ -80,11 +92,11 @@ panel_mapping <- function(df, waves, .schema = list()) {
 }
 
 panel_mapping_schema <- function(x) {
-  attr(x, "schema",  exact = TRUE)
+  attr(x, "schema", exact = TRUE)
 }
 
 panel_mapping_waves <- function(x) {
-  attr(x, "waves",  exact = TRUE)
+  attr(x, "waves", exact = TRUE)
 }
 
 prep_mapping <- function(df) {
@@ -95,7 +107,7 @@ prep_mapping <- function(df) {
 }
 
 panel_mapping_name_columns <- function(panel_mapping) {
-  tk_assert(is.panel_mapping(panel_mapping))
+  tk_assert(is_panel_mapping(panel_mapping))
 
   schema <- panel_mapping_schema(panel_mapping)
 
@@ -110,7 +122,7 @@ panel_mapping_name_columns <- function(panel_mapping) {
 }
 
 panel_mapping_coding_columns <- function(panel_mapping) {
-  tk_assert(is.panel_mapping(panel_mapping))
+  tk_assert(is_panel_mapping(panel_mapping))
 
   schema <- panel_mapping_schema(panel_mapping)
 
@@ -130,6 +142,27 @@ panel_mapping_coding_columns <- function(panel_mapping) {
   )
 }
 
-is.panel_mapping <- function(x) {
+panel_mapping_description_columns <- function(panel_mapping) {
+  tk_assert(is_panel_mapping(panel_mapping))
+
+  schema <- panel_mapping_schema(panel_mapping)
+
+  list(
+    homogenized_name = schema$homogenized_name,
+    homogenized_description = schema$homogenized_description,
+    wave_descriptions = grep(
+      paste0("^", schema$wave_description, "_"),
+      names(panel_mapping),
+      value = TRUE
+    ),
+    wave_names = grep(
+      paste0("^", schema$wave_name, "_"),
+      names(panel_mapping),
+      value = TRUE
+    )
+  )
+}
+
+is_panel_mapping <- function(x) {
   inherits(x, "panel_mapping")
 }

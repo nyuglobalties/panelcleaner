@@ -14,10 +14,38 @@
 #' @return An `unhomogenized_panel` that is ready to be homogenized using
 #'   `bind_waves()`
 #'
+#' @details # Homogenization Steps
+#'
+#' The first part of the homogenization process is to harmonize wave variable names
+#' to the homogenized name. If either there are missing wave variable names and a provided
+#' homogenized name _or_ provided variable names and a missing homogenized name, an error
+#' will be thrown. The original version of panelcleaner included a notion of "issues"
+#' that would allow harmonization with errors, but after continued practice of
+#' using panelcleaner, this behavior is deprecated in favor of halting the harmonization
+#' process altogether.
+#'
+#' The next step is to harmonize the codings for categorical data. As panelcleaner was
+#' intended to be used in a data processing pipeline before analysis was conducted in
+#' Stata, the desired behavior of panelcleaner is to separate values from labels, unlike
+#' R's `factor` class. Codings are written using [rcoder::coding()]. The harmonization process
+#' is similar to names: errors will be thrown if wave codings and homogenized codings
+#' aren't both present or missing, and the codings in all waves will be recoded to the
+#' homogenized coding.
+#'
+#' ## Descriptions
+#'
+#' The last step is to harmonize variable descriptions. This part is optional. It will
+#' only happen if the `homogenized_description` (or custom name specified with a custom
+#' panelcleaner schema) is present. The same types will occur for descriptions. The only
+#' thing different about harmonizing descriptions is that it doesn't affect the data:
+#' it operates by assigning the `bpr.description` attribute for variables. This feature
+#' is really only useful if you intend you data to be used in a
+#' [blueprintr](https://nyuglobalties.github.io/blueprintr) project.
+#'
 #' @export
 homogenize_panel <- function(panel, mapping = NULL, ...) {
   tk_assert(is_unhomogenized_panel(panel))
-  tk_assert(is.panel_mapping(panel) || is.null(mapping))
+  tk_assert(is_panel_mapping(panel) || is.null(mapping))
 
   if (is.null(mapping) && is.null(panel$mapping)) {
     tk_err(c(
@@ -39,6 +67,10 @@ homogenize_panel <- function(panel, mapping = NULL, ...) {
 
   panel <- homogenize_names(panel, mapping, ctx = context)
   panel <- homogenize_codings(panel, mapping, ctx = context)
+
+  if (panel_mapping_schema(mapping)$homogenized_description %in% names(mapping)) {
+    panel <- homogenize_descriptions(panel, mapping, ctx = context)
+  }
 
   panel
 }
@@ -80,7 +112,6 @@ homogenize_names <- function(panel, mapping, ctx = list()) {
         "use `drop_na_homogenized = TRUE`."
       ))
     } else {
-      browser()
       bad_mappings <- dplyr::filter(map_subset, is.na(.data[[pm_names$homogenized_name]]))
       bad_mappings <- dplyr::select(
         bad_mappings,
@@ -114,7 +145,7 @@ homogenize_codings <- function(panel, mapping, ctx = list()) {
   )
 
   map_subset <- long_map_subset(mapping, pm_codings_vec)
-  attr(map_subset, "schema") <- panel_mapping_schema(mapping)
+  map_subset <- set_attr(map_subset, "schema", panel_mapping_schema(mapping))
 
   # Filter rows with missing wave_name as those are probably
   # variables that don't exist or aren't mapping
@@ -127,11 +158,11 @@ homogenize_codings <- function(panel, mapping, ctx = list()) {
 
   missing_coding <-
     !is.na(map_subset[[pm_codings$homogenized_coding]]) &
-    is.na(map_subset[[panel_mapping_schema(mapping)$wave_coding]])
+      is.na(map_subset[[panel_mapping_schema(mapping)$wave_coding]])
 
   missing_homogenized_coding <-
     is.na(map_subset[[pm_codings$homogenized_coding]]) &
-    !is.na(map_subset[[panel_mapping_schema(mapping)$wave_coding]])
+      !is.na(map_subset[[panel_mapping_schema(mapping)$wave_coding]])
 
   if (any(missing_coding)) {
     if (!isTRUE(ignore_missing_codings)) {
@@ -178,19 +209,101 @@ homogenize_codings <- function(panel, mapping, ctx = list()) {
   panel
 }
 
-homogenize_wave_names <- function(panel, w, long_map, ctx = list()) {
-  error_missing_raw_variables <- ctx$error_missing_raw_variables %||% TRUE
+homogenize_descriptions <- function(panel, mapping, ctx = list()) {
+  pm_descs <- panel_mapping_description_columns(mapping)
+  pm_descs_vec <- c(
+    pm_descs$homogenized_name,
+    pm_descs$homogenized_description,
+    pm_descs$wave_description,
+    pm_descs$wave_names
+  )
 
+  map_subset <- long_map_subset(mapping, pm_descs_vec)
+  map_subset <- set_attr(map_subset, "schema", panel_mapping_schema(mapping))
+
+  # Filter rows with missing wave_name as those are probably
+  # variables that don't exist or aren't mapping
+  map_subset <- map_subset[
+    !is.na(map_subset[[panel_mapping_schema(mapping)$wave_name]]),
+  ]
+
+  missing_description <-
+    !is.na(map_subset[[pm_descs$homogenized_description]]) &
+      is.na(map_subset[[panel_mapping_schema(mapping)$wave_description]])
+
+  missing_homogenized_description <-
+    is.na(map_subset[[pm_descs$homogenized_description]]) &
+      !is.na(map_subset[[panel_mapping_schema(mapping)$wave_description]])
+
+  if (any(missing_description)) {
+    tk_err("Some variables have missing descriptions while a homogenized description is defined.")
+  }
+
+  if (any(missing_homogenized_description)) {
+    tk_err(c(
+      "Some variables have missing homogenized codings ",
+      "while wave codings are defined."
+    ))
+  }
+
+  for (w in panel$waves) {
+    panel <- homogenize_wave_descriptions(panel, w, map_subset, ctx = ctx)
+  }
+
+  panel$homogenized_descriptions <- TRUE
+  panel
+}
+
+#' Add blueprintr descriptions to wave variables
+#'
+#' Adds the `bpr.description` attribute to a wave's variables.
+#' This is really only useful when used in conjunction with blueprintr
+#' as the attribute will be identified and propagated in the
+#' blueprint provenance.
+#'
+#' @param panel A `panel` object
+#' @param w A wave identifier
+#' @param long_map A long-form mapping for the particular panel
+#' @param ctx A list of potential context flags
+#' @return `panel` with amended `bpr.description` attributes
+#' @noRd
+homogenize_wave_descriptions <- function(panel, w, long_map, ctx = list()) {
   schema <- panel_mapping_schema(long_map)
-
-  name_col <- as.name(schema$wave_name)
 
   if (!w %in% long_map[["wave"]]) {
     tk_err("Wave {ui_value(w)} not found in mapping waves.")
   }
 
   long_map <- long_map[long_map$wave == w, ]
-  long_map <- long_map[!is.na(long_map[[name_col]]), ]
+  long_map <- long_map[!is.na(long_map[[schema$wave_name]]), ]
+
+  wave_db <- wave(panel, w)
+  variables <- long_map[[schema$wave_name]]
+
+  for (v in variables) {
+    sub_map <- long_map[long_map[[schema$homogenized_name]] == v, ]
+
+    wave_db[[v]] <- set_attr(
+      wave_db[[v]],
+      "bpr.description",
+      sub_map[[schema$homogenized_description]]
+    )
+  }
+
+  amend_wave(panel, w, wave_db)
+}
+
+homogenize_wave_names <- function(panel, w, long_map, ctx = list()) {
+  error_missing_raw_variables <- ctx$error_missing_raw_variables %||% TRUE
+
+  schema <- panel_mapping_schema(long_map)
+
+  if (!w %in% long_map[["wave"]]) {
+    tk_err("Wave {ui_value(w)} not found in mapping waves.")
+  }
+
+  long_map <- long_map[long_map$wave == w, ]
+  long_map <- long_map[!is.na(long_map[[schema$wave_name]]), ]
 
   wave_db <- wave(panel, w)
 

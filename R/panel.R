@@ -182,7 +182,7 @@ add_mapping.default <- function(panel, mapping, ...) {
 #' @describeIn add_mapping Method for unhomogenized panels
 #' @export
 add_mapping.unhomogenized_panel <- function(panel, mapping, ...) {
-  tk_assert(is.panel_mapping(mapping))
+  tk_assert(is_panel_mapping(mapping))
 
   panel$mapping <- mapping
   panel

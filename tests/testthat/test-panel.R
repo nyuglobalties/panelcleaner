@@ -11,7 +11,7 @@ test_that("Basic panel structure holds", {
   wave_2 <- data.frame(id = ids_2, time = 2, question1 = sample(1:5, 100, replace = TRUE), Q2 = sample(0:1, 100, replace = TRUE), q3 = sample(letters[1:10], 100, replace = TRUE), stringsAsFactors = FALSE)
 
   mapping <- tibble::tribble(
-    ~ name_t1, ~ coding_t1, ~ name_t2, ~ coding_t2, ~ panel_name, ~ homogenized_name, ~ homogenized_coding,
+    ~name_t1, ~coding_t1, ~name_t2, ~coding_t2, ~panel_name, ~homogenized_name, ~homogenized_coding,
     "id", NA_character_, "id", NA_character_, "test_panel", "id", NA_character_,
     "time", NA_character_, "time", NA_character_, "test_panel", "time", NA_character_,
     "q1", NA_character_, "question1", NA_character_, "test_panel", "question_1", NA_character_,
@@ -42,6 +42,5 @@ test_that("Basic panel structure holds", {
     )
   )
 
-  expect_true(is.panel_mapping(panel_map))
+  expect_true(is_panel_mapping(panel_map))
 })
-

@@ -1,5 +1,5 @@
 coding_mapping <- function(mapping) {
-  tk_assert(is.panel_mapping(mapping))
+  tk_assert(is_panel_mapping(mapping))
 
   coding_schema_cols <- panel_mapping_coding_columns(mapping)
   coding_schema_cols_names <- unlist(coding_schema_cols)

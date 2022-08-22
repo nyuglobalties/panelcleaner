@@ -6,11 +6,7 @@
 \alias{panelcleaner-package}
 \title{panelcleaner: An interactive interface to homogenize messy panel data into a long format}
 \description{
-Panel data structure can sometimes change over the course of 
-    data collection, which can be a real nuisance when cleaning data.
-    This package aims to document the state of all waves of data in a 
-    comprehensive manner and then homogenize the data into a long dataset
-    ready for data transformations.
+Panel data structure can sometimes change over the course of data collection, which can be a real nuisance when cleaning data. This package aims to document the state of all waves of data in a comprehensive manner and then homogenize the data into a long dataset ready for data transformations.
 }
 \details{
 The panelcleaner package addresses data structure issues with longitudinal

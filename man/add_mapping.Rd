@@ -27,8 +27,8 @@ Add a variable mapping to a panel
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: The default method
+\item \code{add_mapping(default)}: The default method
 
-\item \code{unhomogenized_panel}: Method for unhomogenized panels
+\item \code{add_mapping(unhomogenized_panel)}: Method for unhomogenized panels
+
 }}
-
