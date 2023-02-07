@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">panelcleaner</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
       </span>
     </div>
 
@@ -70,6 +70,7 @@
 <div class="page-header"><h1 id="panelcleaner">panelcleaner<a class="anchor" aria-label="anchor" href="#panelcleaner"></a>
 </h1></div>
 <!-- badges: start -->
+
 <p>Sometimes during data collection, survey structures may change over time due to a litany of potential issues. In order to combine these datasets together into a long format, panelcleaner attempts to identify as many issues as possible prior to binding datasets together by thoroughly documenting the state of each variable for each wave. Moreover, with the assistance of <a href="https://github.com/Global-TIES-for-Children/rcoder" class="external-link"><code>rcoder</code></a>, categorical data can be easily recoded into a single, homogenized coding while not losing the labels or any associated metadata.</p>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -77,49 +78,115 @@
 <p>panelcleaner is built around a <em>panel mapping file</em>, which is a spreadsheet like this:</p>
 <table class="table">
 <thead><tr>
-<th style="text-align:left;"><p>name_1</p></th>
-<th style="text-align:left;"><p>description_1</p></th>
-<th style="text-align:left;"><p>coding_1</p></th>
-<th style="text-align:left;"><p>name_2</p></th>
-<th style="text-align:left;"><p>description_2</p></th>
-<th style="text-align:left;"><p>coding_2</p></th>
-<th style="text-align:left;"><p>panel</p></th>
-<th style="text-align:left;"><p>homogenized_name</p></th>
-<th style="text-align:left;"><p>homogenized_coding</p></th>
+<th style="text-align:left;">
+<p>name_1</p>
+</th>
+<th style="text-align:left;">
+<p>description_1</p>
+</th>
+<th style="text-align:left;">
+<p>coding_1</p>
+</th>
+<th style="text-align:left;">
+<p>name_2</p>
+</th>
+<th style="text-align:left;">
+<p>description_2</p>
+</th>
+<th style="text-align:left;">
+<p>coding_2</p>
+</th>
+<th style="text-align:left;">
+<p>panel</p>
+</th>
+<th style="text-align:left;">
+<p>homogenized_name</p>
+</th>
+<th style="text-align:left;">
+<p>homogenized_coding</p>
+</th>
 </tr></thead>
 <tbody>
 <tr>
-<td style="text-align:left;"><p>id</p></td>
-<td style="text-align:left;"><p>Participant ID</p></td>
-<td style="text-align:left;"></td>
-<td style="text-align:left;"><p>id</p></td>
-<td style="text-align:left;"><p>Partcipant ID</p></td>
-<td style="text-align:left;"></td>
-<td style="text-align:left;"><p>test_panel</p></td>
-<td style="text-align:left;"><p>id</p></td>
-<td style="text-align:left;"></td>
+<td style="text-align:left;">
+<p>id</p>
+</td>
+<td style="text-align:left;">
+<p>Participant ID</p>
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+<p>id</p>
+</td>
+<td style="text-align:left;">
+<p>Partcipant ID</p>
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+<p>test_panel</p>
+</td>
+<td style="text-align:left;">
+<p>id</p>
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
 <tr>
-<td style="text-align:left;"><p>question1</p></td>
-<td style="text-align:left;"><p>The first question</p></td>
-<td style="text-align:left;"></td>
-<td style="text-align:left;"><p>q1</p></td>
-<td style="text-align:left;"><p>The first question</p></td>
-<td style="text-align:left;"></td>
-<td style="text-align:left;"><p>test_panel</p></td>
-<td style="text-align:left;"><p>question_1</p></td>
-<td style="text-align:left;"></td>
+<td style="text-align:left;">
+<p>question1</p>
+</td>
+<td style="text-align:left;">
+<p>The first question</p>
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+<p>q1</p>
+</td>
+<td style="text-align:left;">
+<p>The first question</p>
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+<p>test_panel</p>
+</td>
+<td style="text-align:left;">
+<p>question_1</p>
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
 <tr>
-<td style="text-align:left;"><p>question2</p></td>
-<td style="text-align:left;"><p>The second question</p></td>
-<td style="text-align:left;"><p>coding(code(‘Yes’, 1), code(‘No’, 0))</p></td>
-<td style="text-align:left;"><p>q2</p></td>
-<td style="text-align:left;"><p>The second question</p></td>
-<td style="text-align:left;"><p>coding(code(‘Yes’, ‘YES’), code(‘No’, ‘NO’))</p></td>
-<td style="text-align:left;"><p>test_panel</p></td>
-<td style="text-align:left;"><p>question_2</p></td>
-<td style="text-align:left;"><p>coding(code(‘Yes’, 1), code(‘No’, 0))</p></td>
+<td style="text-align:left;">
+<p>question2</p>
+</td>
+<td style="text-align:left;">
+<p>The second question</p>
+</td>
+<td style="text-align:left;">
+<p>coding(code(‘Yes’, 1), code(‘No’, 0))</p>
+</td>
+<td style="text-align:left;">
+<p>q2</p>
+</td>
+<td style="text-align:left;">
+<p>The second question</p>
+</td>
+<td style="text-align:left;">
+<p>coding(code(‘Yes’, ‘YES’), code(‘No’, ‘NO’))</p>
+</td>
+<td style="text-align:left;">
+<p>test_panel</p>
+</td>
+<td style="text-align:left;">
+<p>question_2</p>
+</td>
+<td style="text-align:left;">
+<p>coding(code(‘Yes’, 1), code(‘No’, 0))</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -339,7 +406,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
