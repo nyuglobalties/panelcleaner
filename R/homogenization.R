@@ -319,9 +319,13 @@ homogenize_wave_names <- function(panel, w, long_map, ctx = list()) {
       ))
     } else {
       issue <- list(missing_vars)
-      names(issue) <- glue("missing_raw_vars_{w}")
+      names(issue) <- glue("missing_raw_variables_{w}")
 
       panel <- add_issues(panel, issue)
+
+      # Subset to known variables
+      long_map <- long_map[long_map[[schema$wave_name]] %in% names(wave_db), ]
+      variables <- variables[variables %in% names(wave_db)]
     }
   }
 
@@ -332,7 +336,7 @@ homogenize_wave_names <- function(panel, w, long_map, ctx = list()) {
 }
 
 long_map_subset <- function(mapping, columns) {
-  map_subset <- dplyr::select(mapping, columns)
+  map_subset <- dplyr::select(mapping, dplyr::all_of(columns))
   wave_tags <- panel_mapping_waves(mapping)
 
   tidyr::pivot_longer(

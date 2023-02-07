@@ -43,6 +43,48 @@ test_that("Variable name homogenization works", {
   }
 })
 
+test_that("Missing variables don't stop homogenization, if desired", {
+  ids_1 <- sample(1:500, 100)
+  ids_2 <- ids_1
+  ids_2[sample(1:100, 10)] <- sample(500:1000, 10)
+
+  wave_1 <- data.frame(id = ids_1, time = 1, q1 = sample(1:5, 100, replace = TRUE), q2 = sample(0:1, 100, replace = TRUE), stringsAsFactors = FALSE)
+  wave_2 <- data.frame(id = ids_2, time = 2, question1 = sample(1:5, 100, replace = TRUE), Q2 = sample(0:1, 100, replace = TRUE), stringsAsFactors = FALSE)
+
+  mapping <- tibble::tribble(
+    ~name_t1, ~coding_t1, ~name_t2, ~coding_t2, ~panel_name, ~homogenized_name, ~homogenized_coding,
+    "id", NA_character_, "id", NA_character_, "test_panel", "id", NA_character_,
+    "time", NA_character_, "time", NA_character_, "test_panel", "time", NA_character_,
+    "q1", NA_character_, "question1", NA_character_, "test_panel", "question_1", NA_character_,
+    "q2", NA_character_, "Q2", NA_character_, "test_panel", "question_2", NA_character_,
+    "q3", NA_character_, "q3", NA_character_, "test_panel", "question_3", NA_character_
+  )
+
+  panel_map <- panel_mapping(
+    mapping,
+    c("t1", "t2"),
+    .schema = list(
+      wave_name = "name",
+      wave_coding = "coding",
+      panel = "panel_name",
+      homogenized_name = "homogenized_name",
+      homogenized_coding = "homogenized_coding"
+    )
+  )
+
+  panel <-
+    enpanel("test_panel", t1 = wave_1, t2 = wave_2) %>%
+    add_mapping(panel_map)
+
+  homogenized_panel <- homogenize_panel(panel, error_missing_raw_variables = FALSE)
+
+  expect_true(has_issues(homogenized_panel))
+  expect_identical(
+    names(issues(homogenized_panel)),
+    c("missing_raw_variables_t1", "missing_raw_variables_t2")
+  )
+})
+
 test_that("Coding homogenization works", {
   set.seed(1182)
 
