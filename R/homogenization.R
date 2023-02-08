@@ -278,6 +278,10 @@ homogenize_wave_descriptions <- function(panel, w, long_map, ctx = list()) {
   long_map <- long_map[!is.na(long_map[[schema$wave_name]]), ]
 
   wave_db <- wave(panel, w)
+
+  # In case some variables are missing due to error_missing_raw_variables being skipped
+  long_map <- long_map[long_map[[schema$homogenized_name]] %in% names(wave_db), ]
+
   variables <- long_map[[schema$homogenized_name]]
 
   for (v in variables) {

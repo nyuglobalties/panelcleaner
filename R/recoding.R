@@ -18,8 +18,10 @@ coding_mapping <- function(mapping) {
 }
 
 homogenize_wave_codings <- function(panel, w, long_map, ctx = list()) {
+  schema <- panel_mapping_schema(long_map)
+
   long_map <- dplyr::filter(long_map, .data$wave == w)
-  long_map <- dplyr::filter(long_map, !is.na(.data[[panel_mapping_schema(long_map)$homogenized_coding]]))
+  long_map <- dplyr::filter(long_map, !is.na(.data[[schema$homogenized_coding]]))
 
   if (nrow(long_map) < 1) {
     return(panel)
@@ -27,7 +29,10 @@ homogenize_wave_codings <- function(panel, w, long_map, ctx = list()) {
 
   wave_db <- wave(panel, w)
 
-  for (variable in long_map[[panel_mapping_schema(long_map)$homogenized_name]]) {
+  # In case some variables are missing due to error_missing_raw_variables being skipped
+  long_map <- long_map[long_map[[schema$homogenized_name]] %in% names(wave_db), ]
+
+  for (variable in long_map[[schema$homogenized_name]]) {
     func <- variable_recoding_func(variable, panel, long_map, w)
     wave_db[[variable]] <- func(wave_db[[variable]])
   }
