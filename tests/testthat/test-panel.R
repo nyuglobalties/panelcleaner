@@ -44,3 +44,29 @@ test_that("Basic panel structure holds", {
 
   expect_true(is_panel_mapping(panel_map))
 })
+
+test_that("Variable duplicates are caught correctly", {
+  mapping <- tibble::tribble(
+    ~name_t1, ~coding_t1, ~name_t2, ~coding_t2, ~panel, ~homogenized_name, ~homogenized_coding,
+    "id", NA_character_, "id", NA_character_, "test_panel", "id", NA_character_,
+    "time", NA_character_, "time", NA_character_, "test_panel", "time", NA_character_,
+    "q1", NA_character_, "question1", NA_character_, "test_panel", "question_1", NA_character_,
+    "q1", NA_character_, "Q2", NA_character_, "test_panel", "question_2", NA_character_,
+    "q3", NA_character_, "q3", NA_character_, "test_panel", "question_3", NA_character_
+  )
+
+  err <- expect_error(panel_mapping(mapping, waves = c("t1", "t2")))
+  expect_match(err$message, "^Duplicated wave names")
+
+  mapping <- tibble::tribble(
+    ~name_t1, ~coding_t1, ~name_t2, ~coding_t2, ~panel, ~homogenized_name, ~homogenized_coding,
+    "id", NA_character_, "id", NA_character_, "test_panel", "id", NA_character_,
+    "time", NA_character_, "time", NA_character_, "test_panel", "time", NA_character_,
+    "q1", NA_character_, "question1", NA_character_, "test_panel", "question_1", NA_character_,
+    "q2", NA_character_, "Q2", NA_character_, "test_panel", "question_1", NA_character_,
+    "q3", NA_character_, "q3", NA_character_, "test_panel", "question_3", NA_character_
+  )
+
+  err <- expect_error(panel_mapping(mapping, waves = c("t1", "t2")))
+  expect_match(err$message, "^Duplicated homogenized names")
+})

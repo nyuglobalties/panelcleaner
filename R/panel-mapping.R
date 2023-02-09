@@ -81,6 +81,10 @@ panel_mapping <- function(df, waves, .schema = list()) {
     }
   }
 
+  for (p in unique(df[[schema$panel]])) {
+    validate_panel(df, p, waves, schema)
+  }
+
   df <- prep_mapping(df)
 
   structure(
@@ -89,6 +93,35 @@ panel_mapping <- function(df, waves, .schema = list()) {
     schema = schema,
     waves = waves
   )
+}
+
+validate_panel <- function(df, p, waves, schema) {
+  df <- df[df[[schema$panel]] == p, ]
+
+  # Don't allow duplicates in names
+  homogenized_names <- df[[schema$homogenized_name]]
+  homogenized_names <- homogenized_names[!is.na(homogenized_names)]
+
+  if (any(duplicated(homogenized_names))) {
+    bad_homogenized_names <- unique(homogenized_names[duplicated(homogenized_names)])
+    bad_homogenized_names <- paste0("- ", bad_homogenized_names, "\n")
+
+    tk_err(c("Duplicated homogenized names encountered in {ui_value(p)}:\n", bad_homogenized_names))
+  }
+
+  for (w in waves) {
+    name_col <- paste0(schema$wave_name, "_", w)
+
+    wave_vars <- df[[name_col]]
+    wave_vars <- wave_vars[!is.na(wave_vars)]
+
+    if (any(duplicated(wave_vars))) {
+      bad_wave_vars <- unique(wave_vars[duplicated(wave_vars)])
+      bad_wave_vars <- paste0("- ", bad_wave_vars, "\n")
+
+      tk_err(c("Duplicated wave names encountered in {ui_value(w)}:\n", bad_wave_vars))
+    }
+  }
 }
 
 panel_mapping_schema <- function(x) {
