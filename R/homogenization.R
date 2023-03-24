@@ -42,6 +42,27 @@
 #' is really only useful if you intend you data to be used in a
 #' [blueprintr](https://nyuglobalties.github.io/blueprintr) project.
 #'
+#' # Extra Parameters
+#'
+#' In some cases the default behavior of panelcleaner is too restrictive, especially during
+#' the beginning of data collection. Often, APIs or general data exports don't include
+#' variables that don't have any submissions yet, but you still want to keep those variables
+#' in your input data. These parameters lift some restrictions on panelcleaner's behavior:
+#'
+#' * `drop_na_homogenized`: If `TRUE`, any NA entries in the homogenized_name column will be
+#'   ignored, as if the row in the panel mapping doesn't exist.
+#' * `ignored_missing_codings`: If `TRUE`, waves with NA codings but with non-NA homogenized
+#'   codings will not have their values homogenized.
+#' * `ignored_missing_homogenized_codings`: If `TRUE`, any variables that have defined wave
+#'   codings but no homogenized coding will not have their codings homogenized.
+#' * `error_missing_raw_variables`: If `FALSE`, raw variables that should be present in the
+#'   data, given the panel mapping, but aren't will not throw an error. Instead, they'll be
+#'   added to the list of [panelcleaner::issues()].
+#' * `replace_missing_with_na`: If `TRUE`, raw_variables that should be present in the data,
+#'   given the panel mapping, but are not will be created and filled with NA values. A message
+#'   will be displayed of all the variables where this action was applied. This value supersedes
+#'   `error_missing_raw_variables`.
+#'
 #' @export
 homogenize_panel <- function(panel, mapping = NULL, ...) {
   tk_assert(is_unhomogenized_panel(panel))
@@ -299,6 +320,7 @@ homogenize_wave_descriptions <- function(panel, w, long_map, ctx = list()) {
 
 homogenize_wave_names <- function(panel, w, long_map, ctx = list()) {
   error_missing_raw_variables <- ctx$error_missing_raw_variables %||% TRUE
+  replace_missing_with_na <- ctx$replace_missing_with_na %||% FALSE
 
   schema <- panel_mapping_schema(long_map)
 
@@ -315,12 +337,20 @@ homogenize_wave_names <- function(panel, w, long_map, ctx = list()) {
 
   if (any(!variables %in% names(wave_db))) {
     missing_vars <- long_map[!long_map[[schema$wave_name]] %in% names(wave_db), ][[schema$wave_name]]
+    missing_msg <- c(
+      "Some variables present in mapping for {ui_value(w)} are not in the data: [",
+      glue_collapse(ui_value(missing_vars), ", "), "]"
+    )
 
-    if (isTRUE(error_missing_raw_variables)) {
-      tk_err(c(
-        "Some variables present in mapping for {ui_value(w)} are not in the data: [",
-        glue_collapse(ui_value(missing_vars), ", "), "]"
-      ))
+    if (isTRUE(replace_missing_with_na)) {
+      msg <- c(missing_msg, "\nThey have been created with missingness in anticipation of their eventual existence")
+      message(paste0(msg, collapse = ""))
+
+      for (mv in missing_vars) {
+        wave_db[[mv]] <- NA
+      }
+    } else if (isTRUE(error_missing_raw_variables)) {
+      tk_err(missing_msg)
     } else {
       issue <- list(missing_vars)
       names(issue) <- glue("missing_raw_variables_{w}")

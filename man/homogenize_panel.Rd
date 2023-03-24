@@ -64,3 +64,25 @@ is really only useful if you intend you data to be used in a
 }
 }
 
+\section{Extra Parameters}{
+In some cases the default behavior of panelcleaner is too restrictive, especially during
+the beginning of data collection. Often, APIs or general data exports don't include
+variables that don't have any submissions yet, but you still want to keep those variables
+in your input data. These parameters lift some restrictions on panelcleaner's behavior:
+\itemize{
+\item \code{drop_na_homogenized}: If \code{TRUE}, any NA entries in the homogenized_name column will be
+ignored, as if the row in the panel mapping doesn't exist.
+\item \code{ignored_missing_codings}: If \code{TRUE}, waves with NA codings but with non-NA homogenized
+codings will not have their values homogenized.
+\item \code{ignored_missing_homogenized_codings}: If \code{TRUE}, any variables that have defined wave
+codings but no homogenized coding will not have their codings homogenized.
+\item \code{error_missing_raw_variables}: If \code{FALSE}, raw variables that should be present in the
+data, given the panel mapping, but aren't will not throw an error. Instead, they'll be
+added to the list of \link[=issues]{issues}.
+\item \code{replace_missing_with_na}: If \code{TRUE}, raw_variables that should be present in the data,
+given the panel mapping, but are not will be created and filled with NA values. A message
+will be displayed of all the variables where this action was applied. This value supersedes
+\code{error_missing_raw_variables}.
+}
+}
+
