@@ -344,7 +344,7 @@ homogenize_wave_names <- function(panel, w, long_map, ctx = list()) {
 
     if (isTRUE(replace_missing_with_na)) {
       msg <- c(missing_msg, "\nThey have been created with missingness in anticipation of their eventual existence")
-      message(paste0(msg, collapse = ""))
+      message(glue::glue(paste0(msg, collapse = "")))
 
       for (mv in missing_vars) {
         wave_db[[mv]] <- NA
